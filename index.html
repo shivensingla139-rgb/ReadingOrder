@@ -550,8 +550,101 @@ footer a{ color:rgba(245,239,226,0.5); }
 /* focus visibility for keyboard users */
 .card:focus-visible .cover-wrap,
 .pill:focus-visible,
+.import-btn{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+  background:transparent;
+  border:1px solid var(--paper-2);
+  color:var(--paper-2);
+  padding:7px 12px;
+  border-radius:20px;
+  cursor:pointer;
+  transition:border-color .15s, color .15s, transform .1s;
+}
+.import-btn:hover{ border-color:var(--ruler); color:var(--ruler); }
+.import-btn:active{ transform:scale(0.94); }
+
+/* ============ SIDE DRAWER ============ */
+.drawer-overlay{
+  position:fixed; inset:0; z-index:50;
+  background:rgba(10,14,10,0.55);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease;
+}
+.drawer-overlay.open{ opacity:1; pointer-events:auto; }
+.drawer{
+  position:fixed; top:0; right:0; bottom:0;
+  width:min(440px, 92vw);
+  background:var(--paper-3);
+  color:var(--ink);
+  z-index:51;
+  box-shadow:-14px 0 40px -12px rgba(10,14,10,0.6);
+  transform:translateX(100%);
+  transition:transform .25s ease;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.drawer.open{ transform:translateX(0); }
+.drawer-head{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--paper-2);
+  display:flex; gap:12px; align-items:flex-start;
+  flex-shrink:0;
+}
+.drawer-head img{
+  width:64px; height:auto; border-radius:2px; box-shadow:var(--shadow-soft); flex-shrink:0;
+}
+.drawer-title{
+  font-family:'Fraunces', serif; font-weight:600; font-size:17px; line-height:1.25; flex:1;
+}
+.drawer-close{
+  background:none; border:none; cursor:pointer; color:var(--ink-soft);
+  font-size:22px; line-height:1; padding:2px 4px; flex-shrink:0;
+}
+.drawer-close:hover{ color:var(--thread); }
+.drawer-body{ padding:16px 18px 28px; overflow-y:auto; flex:1; }
+.drawer-locg-btn{
+  display:block; width:100%; text-align:center; text-decoration:none;
+  font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.04em; text-transform:uppercase;
+  background:var(--thread); color:var(--paper-3); padding:11px 14px; border-radius:4px;
+  margin-bottom:18px; cursor:pointer; border:none;
+}
+.drawer-locg-btn:hover{ background:var(--thread-dim); }
+.drawer-section-label{
+  font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--ink-faint); margin-bottom:8px; display:block;
+}
+.drawer textarea{
+  width:100%; min-height:90px; resize:vertical; font-family:'JetBrains Mono', monospace; font-size:12px;
+  border:1px solid var(--paper-2); border-radius:4px; padding:8px; background:var(--paper); color:var(--ink);
+}
+.drawer-parse-btn{
+  margin-top:8px; font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.03em;
+  background:var(--blue); color:var(--paper-3); border:none; padding:8px 14px; border-radius:4px; cursor:pointer;
+}
+.drawer-parse-btn:hover{ opacity:0.88; }
+.drawer-hint{ font-size:11.5px; color:var(--ink-faint); margin-top:6px; line-height:1.5; }
+.issue-list{ list-style:none; margin:14px 0 0; padding:0; }
+.issue-row{
+  display:flex; align-items:flex-start; gap:9px; padding:7px 0; border-bottom:1px dashed var(--paper-2);
+  cursor:pointer; font-size:13.5px; line-height:1.35;
+}
+.issue-row input{ margin-top:2px; flex-shrink:0; width:15px; height:15px; accent-color:var(--thread); cursor:pointer; }
+.issue-row.checked .issue-txt{ text-decoration:line-through; color:var(--ink-faint); }
+.issue-num{ font-family:'JetBrains Mono', monospace; color:var(--ink-soft); margin-right:4px; }
+.issue-progress{ font-size:11.5px; color:var(--ink-soft); margin-bottom:2px; }
+.drawer-clear-btn{
+  margin-top:12px; font-size:11px; font-family:'JetBrains Mono', monospace; text-transform:uppercase;
+  background:none; border:1px solid var(--paper-2); color:var(--ink-soft); padding:6px 10px; border-radius:14px; cursor:pointer;
+}
+.drawer-clear-btn:hover{ border-color:var(--thread); color:var(--thread); }
+.csv-status{ font-size:11px; color:var(--paper-2); margin-top:6px; font-family:'JetBrains Mono', monospace; }
+
 .chk-btn:focus-visible,
-.reset-btn:focus-visible{
+.reset-btn:focus-visible,
+.import-btn:focus-visible{
   outline:2px solid var(--ruler);
   outline-offset:2px;
 }
@@ -609,8 +702,12 @@ footer a{ color:rgba(245,239,226,0.5); }
     </div>
     <div class="tape-actions">
       <button class="reset-btn" id="resetBtn" type="button">Clear all marks</button>
+      <button class="import-btn" id="importBtn" type="button">Import reading order (CSV)</button>
+      <button class="import-btn" id="defaultOrderBtn" type="button" style="display:none;">Reset to default order</button>
+      <input type="file" id="csvFileInput" accept=".csv,text/csv" style="display:none;">
       <span class="next-up" id="nextUp"></span>
     </div>
+    <div class="csv-status" id="csvStatus"></div>
   </div>
 </header>
 
@@ -624,10 +721,36 @@ footer a{ color:rgba(245,239,226,0.5); }
   Reading order sourced from your phase-by-phase omnibus plan &middot; covers &amp; links via League of Comic Geeks &middot; tap a cover to open its page, tap the tag to mark it read
 </footer>
 
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <img id="drawerCover" src="" alt="">
+    <div class="drawer-title" id="drawerTitle"></div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <button class="drawer-locg-btn" id="drawerLocgBtn" type="button">Open on League of Comic Geeks</button>
+
+    <span class="drawer-section-label">Issue checklist</span>
+    <div id="issueProgressWrap"></div>
+    <ul class="issue-list" id="issueList"></ul>
+
+    <div style="margin-top:16px;">
+      <span class="drawer-section-label">Build / rebuild checklist</span>
+      <div class="drawer-hint">LoCG pages block direct scripted fetches, so paste the collection's issue list here. On the LoCG page, select the "Overview → Stories" list text and paste it below, then parse it. (This is exactly the kind of text shown when you copy the story list off a collection page.)</div>
+      <textarea id="issuePasteArea" placeholder="Paste the copied issue list text from the LoCG page here..."></textarea>
+      <div>
+        <button class="drawer-parse-btn" id="parseIssuesBtn" type="button">Parse &amp; build checklist</button>
+        <button class="drawer-clear-btn" id="clearIssuesBtn" type="button">Clear checklist</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
 </div>
 
 <script>
-const DATA = [
+const DEFAULT_DATA = [
   {"num":"I","name":"THE SILVER & BRONZE AGE FORMATIONS","books":[
     {"t":"Fantastic Four Epic Collection: The World's Greatest Comic Magazine","u":"https://leagueofcomicgeeks.com/comic/6948838/fantastic-four-epic-collection-the-worlds-greatest-comic-magazine-tp","c":"6948838","k":"fantastic-four-epic-collection-worlds-greatest"},
     {"t":"Fantastic Four Epic Collection: The Master Plan of Doctor Doom","u":"https://leagueofcomicgeeks.com/comic/3464929/fantastic-four-epic-collection-the-master-plan-of-doctor-doom-tp","c":"3464929","k":"fantastic-four-epic-collection-master-plan-of-doom"},
@@ -987,6 +1110,9 @@ const DATA = [
 ];
 
 const STORAGE_KEY = 'axm-reading-tracker-v1';
+const CUSTOM_DATA_KEY = 'axm-custom-order-v1';
+const CHECKLISTS_KEY = 'axm-issue-checklists-v1';
+
 let progress = {};
 try{
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -997,8 +1123,28 @@ function saveProgress(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){}
 }
 
-const TOTAL = DATA.reduce((n,p)=>n+p.books.length,0);
+let checklists = {};
+try{
+  const rawC = localStorage.getItem(CHECKLISTS_KEY);
+  checklists = rawC ? JSON.parse(rawC) : {};
+}catch(e){ checklists = {}; }
+
+function saveChecklists(){
+  try{ localStorage.setItem(CHECKLISTS_KEY, JSON.stringify(checklists)); }catch(e){}
+}
+
+let DATA = DEFAULT_DATA;
+try{
+  const rawD = localStorage.getItem(CUSTOM_DATA_KEY);
+  if(rawD){
+    const parsed = JSON.parse(rawD);
+    if(Array.isArray(parsed) && parsed.length) DATA = parsed;
+  }
+}catch(e){ /* fall back to default */ }
+
+let TOTAL = DATA.reduce((n,p)=>n+p.books.length,0);
 document.getElementById('totalCount').textContent = TOTAL;
+document.getElementById('defaultOrderBtn').style.display = (DATA !== DEFAULT_DATA) ? '' : 'none';
 
 let activePhase = 'ALL';
 
@@ -1093,6 +1239,7 @@ function render(){
   let html = '';
   let gi = 0;
   DATA.forEach(phase=>{
+    phase.books.forEach(b=>{ bookByKey[b.k] = b; });
     const cards = phase.books.map(b=>bookCard(b, gi++)).join('');
     html += `
     <section class="phase-section" id="${slugAnchor(phase.num)}" data-phase="${phase.num}">
@@ -1121,18 +1268,19 @@ function titleCase(s){
 }
 
 const cardByKey = {};
+const bookByKey = {};
 
 function attachCardEvents(){
   document.querySelectorAll('.card').forEach(card=>{
     cardByKey[card.dataset.key] = card;
     card.addEventListener('click', e=>{
       if(e.target.closest('.chk-btn')) return;
-      window.open(card.dataset.url, '_blank', 'noopener');
+      openDrawer(card.dataset.key);
     });
     card.addEventListener('keydown', e=>{
       if(e.key === 'Enter' || e.key === ' '){
         e.preventDefault();
-        window.open(card.dataset.url, '_blank', 'noopener');
+        openDrawer(card.dataset.key);
       }
     });
   });
@@ -1203,6 +1351,227 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
     c.setAttribute('aria-pressed','false');
   });
   updateProgressUI();
+});
+
+/* ============ SIDE DRAWER ============ */
+let currentDrawerKey = null;
+const drawerEl = document.getElementById('drawer');
+const drawerOverlay = document.getElementById('drawerOverlay');
+
+function openDrawer(key){
+  const book = bookByKey[key];
+  if(!book) return;
+  currentDrawerKey = key;
+  document.getElementById('drawerCover').src = coverUrl(book.c);
+  document.getElementById('drawerCover').alt = book.t + ' cover';
+  document.getElementById('drawerTitle').textContent = book.t;
+  const locgBtn = document.getElementById('drawerLocgBtn');
+  locgBtn.onclick = ()=> window.open(book.u, '_blank', 'noopener');
+  document.getElementById('issuePasteArea').value = '';
+  renderIssueList(key);
+  drawerEl.classList.add('open');
+  drawerOverlay.classList.add('open');
+  drawerEl.setAttribute('aria-hidden','false');
+}
+
+function closeDrawer(){
+  drawerEl.classList.remove('open');
+  drawerOverlay.classList.remove('open');
+  drawerEl.setAttribute('aria-hidden','true');
+  currentDrawerKey = null;
+}
+
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+drawerOverlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeDrawer(); });
+
+/* ============ ISSUE CHECKLISTS ============ */
+function renderIssueList(key){
+  const list = document.getElementById('issueList');
+  const progWrap = document.getElementById('issueProgressWrap');
+  const data = checklists[key];
+  if(!data || !data.issues || !data.issues.length){
+    list.innerHTML = '';
+    progWrap.innerHTML = `<div class="drawer-hint">No checklist yet for this collection. Paste its issue list below to build one.</div>`;
+    return;
+  }
+  const done = data.issues.filter(is=>data.checked && data.checked[is.num]).length;
+  progWrap.innerHTML = `<div class="issue-progress">${done} / ${data.issues.length} issues read</div>`;
+  list.innerHTML = data.issues.map(is=>{
+    const checked = !!(data.checked && data.checked[is.num]);
+    return `
+    <li class="issue-row ${checked?'checked':''}" data-num="${is.num}">
+      <input type="checkbox" ${checked?'checked':''} aria-label="Mark issue #${is.num} read">
+      <span class="issue-txt"><span class="issue-num">#${is.num}</span>${is.title}</span>
+    </li>`;
+  }).join('');
+  list.querySelectorAll('.issue-row').forEach(row=>{
+    row.addEventListener('click', e=>{
+      const num = row.dataset.num;
+      const d = checklists[key];
+      if(!d.checked) d.checked = {};
+      d.checked[num] = !d.checked[num];
+      saveChecklists();
+      renderIssueList(key);
+    });
+  });
+}
+
+function parseIssueText(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const issues = [];
+  const seen = new Set();
+  for(let i=0;i<lines.length;i++){
+    const line = lines[i];
+    // metadata lines look like: The Amazing Spider-Man #30   ·   Apr 2001   ·   Story   ·   22 pages
+    if(line.includes('·') && /#\d+/.test(line)){
+      const numMatch = line.match(/#(\d+)/);
+      if(!numMatch) continue;
+      const num = numMatch[1];
+      if(seen.has(num)) continue;
+      // title is the nearest preceding line that isn't itself a metadata/duplicate line
+      let title = '';
+      for(let j=i-1;j>=0;j--){
+        const cand = lines[j];
+        if(cand.includes('·')) break;
+        if(/^\d+$/.test(cand)) continue; // index number line
+        if(/^#?\d+$/.test(cand)) continue;
+        title = cand;
+        break;
+      }
+      if(!title) title = `Issue #${num}`;
+      seen.add(num);
+      issues.push({num, title});
+    }
+  }
+  // sort by numeric issue number for a clean checklist order
+  issues.sort((a,b)=> parseInt(a.num,10) - parseInt(b.num,10));
+  return issues;
+}
+
+document.getElementById('parseIssuesBtn').addEventListener('click', ()=>{
+  if(!currentDrawerKey) return;
+  const text = document.getElementById('issuePasteArea').value;
+  const issues = parseIssueText(text);
+  if(!issues.length){
+    alert("Couldn't find any issues in that text. Make sure you pasted the collection's story list from the League of Comic Geeks overview tab (it should include lines like \"The Amazing Spider-Man #30 · Apr 2001 · Story · 22 pages\").");
+    return;
+  }
+  const existing = checklists[currentDrawerKey] || {};
+  checklists[currentDrawerKey] = { issues, checked: existing.checked || {} };
+  saveChecklists();
+  renderIssueList(currentDrawerKey);
+});
+
+document.getElementById('clearIssuesBtn').addEventListener('click', ()=>{
+  if(!currentDrawerKey) return;
+  if(!confirm('Clear the issue checklist for this collection?')) return;
+  delete checklists[currentDrawerKey];
+  saveChecklists();
+  renderIssueList(currentDrawerKey);
+});
+
+/* ============ CSV IMPORT ============ */
+function parseCSV(text){
+  // basic RFC4180-ish CSV parser (handles quoted fields with commas/newlines)
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i], next = text[i+1];
+    if(inQuotes){
+      if(c === '"' && next === '"'){ field += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else field += c;
+    } else {
+      if(c === '"') inQuotes = true;
+      else if(c === ','){ row.push(field); field = ''; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else if(c === '\r'){ /* skip */ }
+      else field += c;
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r=> r.some(f=>f.trim().length));
+}
+
+function slugify(s){
+  return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60);
+}
+
+function buildDataFromCSV(rows){
+  // detect & skip header row if present
+  let startIdx = 0;
+  const firstCell = (rows[0][0] || '').trim().toLowerCase();
+  if(firstCell === 'phase number' || firstCell === 'phase' ){ startIdx = 1; }
+
+  const phaseOrder = [];
+  const phaseMap = {};
+  for(let i=startIdx;i<rows.length;i++){
+    const r = rows[i];
+    if(r.length < 4) continue;
+    const num = (r[0]||'').trim();
+    const name = (r[1]||'').trim();
+    const title = (r[2]||'').trim();
+    const url = (r[3]||'').trim();
+    if(!num || !title || !url) continue;
+    if(!phaseMap[num]){
+      phaseMap[num] = { num, name, books: [] };
+      phaseOrder.push(num);
+    }
+    const idMatch = url.match(/\/comic\/(\d+)/);
+    const c = idMatch ? idMatch[1] : '';
+    const k = c ? `c${c}` : `${slugify(num)}-${slugify(title)}`;
+    phaseMap[num].books.push({ t: title, u: url, c, k });
+  }
+  return phaseOrder.map(n=>phaseMap[n]);
+}
+
+function reinitAfterDataChange(){
+  TOTAL = DATA.reduce((n,p)=>n+p.books.length,0);
+  document.getElementById('totalCount').textContent = TOTAL;
+  activePhase = 'ALL';
+  buildFilterBar();
+  render();
+  updateProgressUI();
+}
+
+document.getElementById('importBtn').addEventListener('click', ()=>{
+  document.getElementById('csvFileInput').click();
+});
+
+document.getElementById('csvFileInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const rows = parseCSV(String(reader.result));
+      const newData = buildDataFromCSV(rows);
+      if(!newData.length){
+        document.getElementById('csvStatus').textContent = 'No valid rows found in that CSV. Expected columns: Phase Number, Phase Name, Comic Name, Comic Link on LoCG.';
+        return;
+      }
+      DATA = newData;
+      try{ localStorage.setItem(CUSTOM_DATA_KEY, JSON.stringify(DATA)); }catch(err){}
+      document.getElementById('defaultOrderBtn').style.display = '';
+      const bookCount = DATA.reduce((n,p)=>n+p.books.length,0);
+      document.getElementById('csvStatus').textContent = `Imported ${DATA.length} phases, ${bookCount} collected editions.`;
+      reinitAfterDataChange();
+    }catch(err){
+      document.getElementById('csvStatus').textContent = 'Could not parse that CSV: ' + err.message;
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.getElementById('defaultOrderBtn').addEventListener('click', ()=>{
+  if(!confirm('Discard your imported reading order and go back to the default order?')) return;
+  DATA = DEFAULT_DATA;
+  try{ localStorage.removeItem(CUSTOM_DATA_KEY); }catch(err){}
+  document.getElementById('defaultOrderBtn').style.display = 'none';
+  document.getElementById('csvStatus').textContent = '';
+  reinitAfterDataChange();
 });
 
 buildFilterBar();
