@@ -28,17 +28,65 @@
   --blue: #3f6b78;
   --shadow: 0 10px 26px -14px rgba(10,14,10,0.55);
   --shadow-soft: 0 4px 14px -8px rgba(10,14,10,0.45);
-  --r-card: 3px;
+  --r-card: 4px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* --- THEME PRESETS --- */
+body.theme-pink {
+  --mat: #111315;
+  --mat-2: #0b0d0e;
+  --mat-line: rgba(232,130,147,0.06);
+  --mat-line-strong: rgba(232,130,147,0.12);
+  --ruler: #e88293;
+  --ruler-dim: #b86271;
+  --paper: #f7eff1;
+  --paper-2: #e8d7da;
+  --paper-3: #ffffff;
+  --ink: #1a1214;
+  --ink-soft: #6b5559;
+  --ink-faint: #9c8287;
+  --thread: #168a48;
+  --thread-dim: #0e5c30;
+  --gold: #a8522b;
+}
+
+body.theme-sepia {
+  --mat: #42382c;
+  --mat-2: #30281e;
+  --ruler: #d4a373;
+  --ruler-dim: #bc8a5f;
+  --paper: #fefae0;
+  --paper-2: #faedcd;
+  --paper-3: #fffef5;
+  --ink: #281e11;
+  --ink-soft: #60503e;
+  --ink-faint: #8d7963;
+  --thread: #bc6c25;
+  --thread-dim: #9b551b;
+  --gold: #dda15e;
+}
+
+body.theme-midnight {
+  --mat: #18202c;
+  --mat-2: #101620;
+  --ruler: #61a5c2;
+  --ruler-dim: #4682a9;
+  --paper: #e2eafc;
+  --paper-2: #b6ccfe;
+  --paper-3: #f0f4ff;
+  --ink: #0b132b;
+  --ink-soft: #3a506b;
+  --ink-faint: #5bc0be;
+  --thread: #e07a5f;
+  --thread-dim: #cc5834;
+  --gold: #f4a261;
+}
+
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
-html{
-  -webkit-text-size-adjust:100%;
-  overflow-x:hidden;
-}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden;}
 body{
   background:var(--mat);
   color:var(--ink);
@@ -47,9 +95,9 @@ body{
   overflow-x:hidden;
   -webkit-tap-highlight-color: transparent;
   position:relative;
+  transition:background 0.3s ease, color 0.3s ease;
 }
 
-/* cutting-mat grid texture */
 body::before{
   content:"";
   position:fixed; inset:0;
@@ -64,7 +112,6 @@ body::before{
     linear-gradient(160deg, var(--mat), var(--mat-2) 120%);
   background-color: var(--mat);
 }
-/* subtle grain */
 body::after{
   content:"";
   position:fixed; inset:0;
@@ -77,7 +124,6 @@ body::after{
 
 .wrap{ position:relative; z-index:1; }
 
-/* ruler ticks along top edge */
 .ruler-top{
   height:20px;
   background: repeating-linear-gradient(90deg, var(--ruler) 0 1.5px, transparent 1.5px 20px),
@@ -87,7 +133,6 @@ body::after{
   border-bottom:1px solid rgba(0,0,0,0.25);
 }
 
-/* ============ HEADER ============ */
 header.hero{
   padding:34px 20px 26px;
   max-width:1180px;
@@ -107,6 +152,15 @@ header.hero{
 }
 .eyebrow .snip{ width:16px; height:16px; opacity:0.9; flex:none; }
 .eyebrow .rule{ flex:1; height:1px; background:linear-gradient(90deg, var(--mat-line-strong), transparent); }
+
+.top-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
 
 .title-row{
   display:flex;
@@ -146,7 +200,29 @@ p.sub{
   margin:0 0 26px;
 }
 
-/* ---- measuring-tape progress ---- */
+.settings-trigger-btn {
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.05em;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--ruler);
+  color: var(--paper-3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .2s ease;
+  box-shadow: var(--shadow-soft);
+}
+.settings-trigger-btn:hover {
+  background: var(--ruler);
+  color: #2a2408;
+  transform: translateY(-1px);
+}
+.settings-trigger-btn:active { transform: scale(0.95); }
+
 .tape-wrap{
   background:var(--paper);
   border-radius:4px;
@@ -156,7 +232,6 @@ p.sub{
   border:1px solid rgba(0,0,0,0.06);
 }
 .tape-wrap::before, .tape-wrap::after{
-  /* torn/washi tape corners */
   content:"";
   position:absolute;
   width:64px; height:24px;
@@ -237,7 +312,7 @@ p.sub{
   border-top:1px dashed rgba(0,0,0,0.12);
   display:flex; gap:14px; align-items:center; flex-wrap:wrap;
 }
-.reset-btn{
+.reset-btn, .import-btn{
   font-family:'JetBrains Mono', monospace;
   font-size:11px;
   letter-spacing:0.05em;
@@ -248,8 +323,8 @@ p.sub{
   cursor:pointer;
   transition:all .15s ease;
 }
-.reset-btn:hover{ border-color:var(--thread); color:var(--thread); }
-.reset-btn:active{ transform:scale(0.94); }
+.reset-btn:hover, .import-btn:hover{ border-color:var(--thread); color:var(--thread); }
+.reset-btn:active, .import-btn:active{ transform:scale(0.94); }
 .next-up{
   font-family:'Archivo', sans-serif;
   font-size:12.5px;
@@ -257,7 +332,6 @@ p.sub{
 }
 .next-up b{ color:var(--ink); font-weight:600; }
 
-/* ============ PHASE FILTER BAR ============ */
 .filter-bar{
   position:sticky; top:0; z-index:20;
   background:rgba(59,75,62,0.92);
@@ -265,7 +339,12 @@ p.sub{
   -webkit-backdrop-filter:blur(10px) saturate(1.1);
   border-bottom:1px solid rgba(244,238,220,0.12);
   padding:12px 0;
+  transition: background 0.3s ease;
 }
+body.theme-pink .filter-bar { background: rgba(17,19,21,0.92); }
+body.theme-sepia .filter-bar { background: rgba(66,56,44,0.92); }
+body.theme-midnight .filter-bar { background: rgba(24,32,44,0.92); }
+
 .filter-scroll{
   display:flex;
   gap:8px;
@@ -294,7 +373,6 @@ p.sub{
   transition:all .15s ease;
   display:flex; align-items:center; gap:7px;
   user-select:none;
-  -webkit-user-select:none;
 }
 .pill .n{
   background:rgba(244,238,220,0.14);
@@ -312,7 +390,6 @@ p.sub{
 }
 .pill.active .n{ background:rgba(0,0,0,0.14); color:#2a2408; }
 
-/* ============ MAIN ============ */
 main{
   max-width:1180px;
   margin:0 auto;
@@ -368,7 +445,6 @@ main{
   overflow:visible;
 }
 
-/* book grid */
 .book-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(132px, 1fr));
@@ -383,7 +459,6 @@ main{
   cursor:pointer;
   border-radius:var(--r-card);
   transition:transform .18s cubic-bezier(.3,1.3,.4,1);
-  -webkit-user-select:none;
   user-select:none;
 }
 .card:active{ transform:scale(0.965) translateY(1px); }
@@ -418,7 +493,6 @@ main{
     var(--paper-3);
 }
 
-/* washi tape corner - sits on .card, not clipped by cover overflow */
 .washi{
   position:absolute; top:-6px; left:14px;
   width:44px; height:16px;
@@ -436,7 +510,6 @@ main{
   mix-blend-mode:overlay;
 }
 
-/* dashed cut-line when read */
 .card.read .cover-wrap{
   filter:saturate(0.55) brightness(0.82);
 }
@@ -492,7 +565,21 @@ main{
   letter-spacing:0.03em;
 }
 
-/* hand-drawn checkbox button */
+.tags-preview {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.tag-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  background: rgba(0,0,0,0.25);
+  color: var(--ruler);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
 .chk-btn{
   flex:none;
   width:30px; height:30px;
@@ -522,16 +609,6 @@ main{
 .card.read .chk-box{ fill:var(--thread); stroke:var(--thread); }
 .card.read .chk-mark{ stroke-width:2.6; stroke-dashoffset:0; }
 
-/* ============ EMPTY / FOOTER ============ */
-.empty-msg{
-  font-family:'Fraunces', serif;
-  font-style:italic;
-  color:rgba(245,239,226,0.55);
-  text-align:center;
-  padding:60px 20px;
-  font-size:16px;
-}
-
 footer{
   text-align:center;
   padding:30px 20px calc(30px + var(--safe-bottom));
@@ -541,32 +618,7 @@ footer{
   letter-spacing:0.04em;
   position:relative; z-index:1;
 }
-footer a{ color:rgba(245,239,226,0.5); }
 
-@media (prefers-reduced-motion: reduce){
-  *{ transition-duration:0.01ms !important; animation-duration:0.01ms !important; }
-}
-
-/* focus visibility for keyboard users */
-.card:focus-visible .cover-wrap,
-.pill:focus-visible,
-.import-btn{
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  letter-spacing:0.03em;
-  text-transform:uppercase;
-  background:transparent;
-  border:1px solid var(--paper-2);
-  color:var(--paper-2);
-  padding:7px 12px;
-  border-radius:20px;
-  cursor:pointer;
-  transition:border-color .15s, color .15s, transform .1s;
-}
-.import-btn:hover{ border-color:var(--ruler); color:var(--ruler); }
-.import-btn:active{ transform:scale(0.94); }
-
-/* ============ SIDE DRAWER ============ */
 .drawer-overlay{
   position:fixed; inset:0; z-index:50;
   background:rgba(10,14,10,0.55);
@@ -574,9 +626,10 @@ footer a{ color:rgba(245,239,226,0.5); }
   transition:opacity .2s ease;
 }
 .drawer-overlay.open{ opacity:1; pointer-events:auto; }
+
 .drawer{
   position:fixed; top:0; right:0; bottom:0;
-  width:min(440px, 92vw);
+  width:min(460px, 94vw);
   background:var(--paper-3);
   color:var(--ink);
   z-index:51;
@@ -605,13 +658,15 @@ footer a{ color:rgba(245,239,226,0.5); }
 }
 .drawer-close:hover{ color:var(--thread); }
 .drawer-body{ padding:16px 18px 28px; overflow-y:auto; flex:1; }
+
 .drawer-locg-btn{
   display:block; width:100%; text-align:center; text-decoration:none;
   font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.04em; text-transform:uppercase;
   background:var(--thread); color:var(--paper-3); padding:11px 14px; border-radius:4px;
   margin-bottom:18px; cursor:pointer; border:none;
 }
-.drawer-locg-btn:hover{ background:var(--thread-dim); }
+.drawer-locg-btn:hover{ opacity:0.9; }
+
 .drawer-section-label{
   font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
   color:var(--ink-faint); margin-bottom:8px; display:block;
@@ -640,13 +695,101 @@ footer a{ color:rgba(245,239,226,0.5); }
   background:none; border:1px solid var(--paper-2); color:var(--ink-soft); padding:6px 10px; border-radius:14px; cursor:pointer;
 }
 .drawer-clear-btn:hover{ border-color:var(--thread); color:var(--thread); }
-.csv-status{ font-size:11px; color:var(--paper-2); margin-top:6px; font-family:'JetBrains Mono', monospace; }
 
-.chk-btn:focus-visible,
-.reset-btn:focus-visible,
-.import-btn:focus-visible{
-  outline:2px solid var(--ruler);
-  outline-offset:2px;
+.settings-group {
+  margin-bottom: 22px;
+}
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.palette-card {
+  border: 2px solid var(--paper-2);
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  background: var(--paper);
+  transition: all 0.15s ease;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.palette-card:hover { border-color: var(--ruler); }
+.palette-card.active { border-color: var(--thread); font-weight: 600; background: var(--paper-2); }
+.swatches {
+  display: flex;
+  height: 14px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.swatch { flex: 1; }
+
+.custom-palette-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.custom-palette-form label {
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.custom-palette-form input[type="color"] {
+  width: 100%;
+  height: 32px;
+  border: 1px solid var(--paper-2);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+.apply-custom-btn {
+  grid-column: span 2;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  background: var(--thread);
+  color: var(--paper-3);
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.tag-toggles-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--paper);
+  border: 1px solid var(--paper-2);
+  border-radius: 4px;
+}
+.tag-toggle-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--paper-2);
+  color: var(--ink);
+  padding: 4px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  transition: all 0.1s ease;
+}
+.tag-toggle-chip.disabled {
+  opacity: 0.4;
+  text-decoration: line-through;
+  background: transparent;
+  border-color: var(--paper-2);
 }
 </style>
 </head>
@@ -666,26 +809,28 @@ footer a{ color:rgba(245,239,226,0.5); }
     <span>One continuous cut &middot; no genre bins</span>
     <span class="rule"></span>
   </div>
-  <div class="title-row">
-    <svg class="logo-mark" viewBox="0 0 72 72" fill="none" aria-hidden="true">
-      <path d="M36 6.5c-1 5-1.6 9-1.2 13M36 6.5c1 5 1.6 9 1.2 13" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M64 21c-4.5 2.4-8 4.3-11.4 6.7M64 21c-4.8 1.4-8.6 2.6-12.2 4.4" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M64 52c-4.6-2.1-8.2-3.7-11.7-5.7M64 52c-4.9-1-8.8-1.9-12.4-3.3" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M8 21c4.5 2.4 8 4.3 11.4 6.7M8 21c4.8 1.4 8.6 2.6 12.2 4.4" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M8 52c4.6-2.1 8.2-3.7 11.7-5.7M8 52c4.9-1 8.8-1.9 12.4-3.3" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M36 65.5c1-5 1.6-9 1.2-13M36 65.5c-1-5-1.6-9-1.2-13" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
-      <path d="M19.5 26.8c-4.6 2.9-8.1 5.6-11 9.4 3 3.6 6.5 6.3 11 9.2" stroke="var(--ruler-dim)" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
-      <path d="M52.6 26.8c4.6 2.9 8.1 5.6 11 9.4-3 3.6-6.5 6.3-11 9.2" stroke="var(--ruler-dim)" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
-      <path d="M36 19.4c-6 0.2-10.8 2-15.6 5.6 1.3 5.6 3.4 10 6.7 14.6" stroke="var(--ruler-dim)" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
-      <path d="M36 52.6c6-0.2 10.8-2 15.6-5.6-1.3-5.6-3.4-10-6.7-14.6" stroke="var(--ruler-dim)" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
-      <path d="M15.5 22c14 20 27 20 41 0" stroke="var(--thread)" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.92"/>
-      <path d="M13.8 46.6c15-16.4 29-16.4 44.4 0" stroke="var(--thread)" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.92"/>
-      <circle cx="36" cy="36" r="3.1" fill="var(--thread)"/>
-      <path d="M9 36.5c9-1.4 18-1.6 27-1 9 0.6 18 0.9 27 0" stroke="var(--paper-3)" stroke-width="1" stroke-dasharray="1 5.5" stroke-linecap="round" opacity="0.5"/>
-    </svg>
-    <h1 class="title">The Full Cut<br><em>Reading Order</em></h1>
+  
+  <div class="top-actions-row">
+    <div class="title-row" style="margin:0;">
+      <svg class="logo-mark" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+        <path d="M36 6.5c-1 5-1.6 9-1.2 13M36 6.5c1 5 1.6 9 1.2 13" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M64 21c-4.5 2.4-8 4.3-11.4 6.7M64 21c-4.8 1.4-8.6 2.6-12.2 4.4" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M64 52c-4.6-2.1-8.2-3.7-11.7-5.7M64 52c-4.9-1-8.8-1.9-12.4-3.3" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M8 21c4.5 2.4 8 4.3 11.4 6.7M8 21c4.8 1.4 8.6 2.6 12.2 4.4" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M8 52c4.6-2.1 8.2-3.7 11.7-5.7M8 52c-4.9-1-8.8-1.9-12.4-3.3" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M36 65.5c1-5 1.6-9 1.2-13M36 65.5c-1-5-1.6-9-1.2-13" stroke="var(--ruler)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+        <path d="M15.5 22c14 20 27 20 41 0" stroke="var(--thread)" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.92"/>
+        <circle cx="36" cy="36" r="3.1" fill="var(--thread)"/>
+      </svg>
+      <h1 class="title">The Full Cut<br><em>Reading Order</em></h1>
+    </div>
+    <button class="settings-trigger-btn" id="openSettingsBtn" type="button">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings &amp; Palettes
+    </button>
   </div>
-  <p class="sub">The complete merged omnibus order, laid out phase by phase exactly as plotted — nothing re-sorted, nothing re-shelved. Mark a spine, watch the tape fill in.</p>
+  
+  <p class="sub">The complete merged omnibus order, laid out phase by phase exactly as plotted. Filter tags, change color palettes, and mark spines as you cut through the run.</p>
 
   <div class="tape-wrap">
     <div class="tape-head">
@@ -707,7 +852,7 @@ footer a{ color:rgba(245,239,226,0.5); }
       <input type="file" id="csvFileInput" accept=".csv,text/csv" style="display:none;">
       <span class="next-up" id="nextUp"></span>
     </div>
-    <div class="csv-status" id="csvStatus"></div>
+    <div class="csv-status" id="csvStatus" style="font-size:11px; color:var(--paper-2); margin-top:6px; font-family:'JetBrains Mono', monospace;"></div>
   </div>
 </header>
 
@@ -718,10 +863,12 @@ footer a{ color:rgba(245,239,226,0.5); }
 <main id="main"></main>
 
 <footer>
-  Reading order sourced from your phase-by-phase omnibus plan &middot; covers &amp; links via League of Comic Geeks &middot; tap a cover to open its page, tap the tag to mark it read
+  Reading order sourced from your phase-by-phase omnibus plan &middot; covers &amp; links via League of Comic Geeks &middot; tap a cover to open its page
 </footer>
 
 <div class="drawer-overlay" id="drawerOverlay"></div>
+
+<!-- BOOK DETAILS / ISSUE CHECKLIST DRAWER -->
 <aside class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-head">
     <img id="drawerCover" src="" alt="">
@@ -730,6 +877,7 @@ footer a{ color:rgba(245,239,226,0.5); }
   </div>
   <div class="drawer-body">
     <button class="drawer-locg-btn" id="drawerLocgBtn" type="button">Open on League of Comic Geeks</button>
+    <div id="drawerTagsWrap" style="margin-bottom:14px;"></div>
 
     <span class="drawer-section-label">Issue checklist</span>
     <div id="issueProgressWrap"></div>
@@ -737,8 +885,8 @@ footer a{ color:rgba(245,239,226,0.5); }
 
     <div style="margin-top:16px;">
       <span class="drawer-section-label">Build / rebuild checklist</span>
-      <div class="drawer-hint">LoCG pages block direct scripted fetches, so paste the collection's issue list here. On the LoCG page, select the "Overview → Stories" list text and paste it below, then parse it. (This is exactly the kind of text shown when you copy the story list off a collection page.)</div>
-      <textarea id="issuePasteArea" placeholder="Paste the copied issue list text from the LoCG page here..."></textarea>
+      <div class="drawer-hint">Paste the collection's issue list copied from LoCG overview/stories tab below to parse into a checklist.</div>
+      <textarea id="issuePasteArea" placeholder="Paste issue list text here..."></textarea>
       <div>
         <button class="drawer-parse-btn" id="parseIssuesBtn" type="button">Parse &amp; build checklist</button>
         <button class="drawer-clear-btn" id="clearIssuesBtn" type="button">Clear checklist</button>
@@ -747,391 +895,81 @@ footer a{ color:rgba(245,239,226,0.5); }
   </div>
 </aside>
 
+<!-- SETTINGS DRAWER -->
+<aside class="drawer" id="settingsDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div class="drawer-title">Settings &amp; Customization</div>
+    <button class="drawer-close" id="settingsClose" aria-label="Close">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <div class="settings-group">
+      <span class="drawer-section-label">Color Palettes</span>
+      <div class="palette-grid">
+        <div class="palette-card active" data-theme="default">
+          Default Mat
+          <div class="swatches"><div class="swatch" style="background:#3b4b3e"></div><div class="swatch" style="background:#f5efe2"></div><div class="swatch" style="background:#b5402f"></div><div class="swatch" style="background:#c99a3e"></div></div>
+        </div>
+        <div class="palette-card" data-theme="pink">
+          Eosine Pink &amp; Green
+          <div class="swatches"><div class="swatch" style="background:#111315"></div><div class="swatch" style="background:#e88293"></div><div class="swatch" style="background:#a8522b"></div><div class="swatch" style="background:#168a48"></div></div>
+        </div>
+        <div class="palette-card" data-theme="sepia">
+          Vintage Sepia
+          <div class="swatches"><div class="swatch" style="background:#42382c"></div><div class="swatch" style="background:#fefae0"></div><div class="swatch" style="background:#bc6c25"></div><div class="swatch" style="background:#d4a373"></div></div>
+        </div>
+        <div class="palette-card" data-theme="midnight">
+          Midnight Blue
+          <div class="swatches"><div class="swatch" style="background:#18202c"></div><div class="swatch" style="background:#e2eafc"></div><div class="swatch" style="background:#e07a5f"></div><div class="swatch" style="background:#61a5c2"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <span class="drawer-section-label">Create Custom 4-Color Palette</span>
+      <div class="custom-palette-form">
+        <label>Mat Background <input type="color" id="custMat" value="#2b3a4a"></label>
+        <label>Paper Background <input type="color" id="custPaper" value="#f4f1ea"></label>
+        <label>Thread / Accent <input type="color" id="custThread" value="#d94e33"></label>
+        <label>Ruler / Highlight <input type="color" id="custRuler" value="#f2c94c"></label>
+        <button class="apply-custom-btn" id="applyCustomPaletteBtn" type="button">Apply Custom Palette</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <span class="drawer-section-label">Character / Tag Toggles (Enable &amp; Disable)</span>
+      <div class="drawer-hint" style="margin-bottom:8px;">Toggle tags on or off to filter which comics display in your feed.</div>
+      <div class="tag-toggles-wrap" id="tagTogglesWrap"></div>
+    </div>
+  </div>
+</aside>
+
 </div>
 
 <script>
 const DEFAULT_DATA = [
-  {"num":"I","name":"THE SILVER & BRONZE AGE FORMATIONS","books":[
-    {"t":"Fantastic Four Epic Collection: The World's Greatest Comic Magazine","u":"https://leagueofcomicgeeks.com/comic/6948838/fantastic-four-epic-collection-the-worlds-greatest-comic-magazine-tp","c":"6948838","k":"fantastic-four-epic-collection-worlds-greatest"},
-    {"t":"Fantastic Four Epic Collection: The Master Plan of Doctor Doom","u":"https://leagueofcomicgeeks.com/comic/3464929/fantastic-four-epic-collection-the-master-plan-of-doctor-doom-tp","c":"3464929","k":"fantastic-four-epic-collection-master-plan-of-doom"},
-    {"t":"The Avengers Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5296680/the-avengers-omnibus-vol-1-hc","c":"5296680","k":"the-avengers-omnibus-vol-1"},
-    {"t":"The X-Men Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/4646630/x-men-omnibus-vol-1-hc","c":"4646630","k":"the-x-men-omnibus-vol-1"},
-    {"t":"The Amazing Spider-Man Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/6124176/the-amazing-spider-man-omnibus-vol-1-hc","c":"6124176","k":"the-amazing-spider-man-omnibus-vol-1"},
-    {"t":"Fantastic Four Epic Collection: The Coming of Galactus","u":"https://leagueofcomicgeeks.com/comic/1148394/fantastic-four-epic-collection-the-coming-of-galactus-tp","c":"1148394","k":"fantastic-four-epic-collection-coming-of-galactus"},
-    {"t":"The Avengers Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/2772231/the-avengers-omnibus-vol-2-hc","c":"2772231","k":"the-avengers-omnibus-vol-2"},
-    {"t":"The X-Men Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/7482127/x-men-omnibus-vol-2-hc","c":"7482127","k":"the-x-men-omnibus-vol-2"},
-    {"t":"The Amazing Spider-Man Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/3973023/the-amazing-spider-man-omnibus-vol-2-hc?variant=1338085","c":"3973023","k":"the-amazing-spider-man-omnibus-vol-2"},
-    {"t":"Silver Surfer Epic Collection: When Calls Galactus","u":"https://leagueofcomicgeeks.com/comic/2087898/silver-surfer-epic-collection-when-calls-galactus-tp?variant=1143367","c":"2087898","k":"silver-surfer-epic-collection-when-calls-galactus"},
-    {"t":"Guardians of the Galaxy Epic Collection: Earth Shall Overcome","u":"https://leagueofcomicgeeks.com/comic/2547471/guardians-of-the-galaxy-epic-collection-earth-shall-overcome-tp","c":"2547471","k":"guardians-of-the-galaxy-epic-collection-earth-shall-overcome"},
-    {"t":"Spider-Man: Blue","u":"https://leagueofcomicgeeks.com/comic/6858951/spider-man-blue-tp?variant=6520685","c":"6858951","k":"spider-man-blue"},
-    {"t":"Luke Cage Epic Collection: Retribution","u":"https://leagueofcomicgeeks.com/comic/7133406/luke-cage-epic-collection-retribution-tp","c":"7133406","k":"luke-cage-epic-collection-retribution"},
-    {"t":"The Avengers Omnibus Vol. 3","u":"https://leagueofcomicgeeks.com/comic/3857489/the-avengers-omnibus-vol-3-hc","c":"3857489","k":"the-avengers-omnibus-vol-3"},
-    {"t":"The Avengers: The Kree-Skrull War","u":"https://leagueofcomicgeeks.com/comic/4886955/the-avengers-the-kree-skrull-war-tp","c":"4886955","k":"the-avengers-the-kree-skrull-war"},
-    {"t":"The Amazing Spider-Man Omnibus Vol. 3","u":"https://leagueofcomicgeeks.com/comic/2862196/the-amazing-spider-man-omnibus-vol-3-hc?variant=4027141","c":"2862196","k":"the-amazing-spider-man-omnibus-vol-3"},
-    {"t":"The Defenders Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/7451388/the-defenders-omnibus-vol-1-hc","c":"7451388","k":"the-defenders-omnibus-vol-1"},
-    {"t":"Iron Fist Epic Collection: The Fury of Iron Fist","u":"https://leagueofcomicgeeks.com/comic/5084369/iron-fist-epic-collection-the-fury-of-iron-fist-tp?variant=8090570","c":"5084369","k":"iron-fist-epic-collection-the-fury-of-iron-fist"},
-    {"t":"Adam Warlock Omnibus","u":"https://leagueofcomicgeeks.com/comic/2824462/adam-warlock-omnibus-hc?variant=5695699","c":"2824462","k":"adam-warlock-omnibus"},
-    {"t":"The Amazing Spider-Man Omnibus Vol. 4","u":"https://leagueofcomicgeeks.com/comic/8544293/the-amazing-spider-man-omnibus-vol-4-hc","c":"8544293","k":"the-amazing-spider-man-omnibus-vol-4"},
-    {"t":"Nova: Richard Rider Omnibus","u":"https://leagueofcomicgeeks.com/comic/4708153/nova-richard-rider-omnibus-hc","c":"4708153","k":"nova-richard-rider-omnibus"},
-    {"t":"The Defenders Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/2262152/the-defenders-omnibus-vol-2-hc","c":"2262152","k":"the-defenders-omnibus-vol-2"},
-    {"t":"Guardians of the Galaxy Epic Collection: Quest for the Shield","u":"https://leagueofcomicgeeks.com/comic/4175298/guardians-of-the-galaxy-epic-collection-quest-for-the-shield-tp","c":"4175298","k":"guardians-of-the-galaxy-epic-collection-quest-for-the-shield"},
-    {"t":"The Amazing Spider-Man Omnibus Vol. 5","u":"https://leagueofcomicgeeks.com/comic/6013864/the-amazing-spider-man-omnibus-vol-5-hc?variant=5960005","c":"6013864","k":"the-amazing-spider-man-omnibus-vol-5"},
-    {"t":"The Avengers Omnibus Vol. 4","u":"https://leagueofcomicgeeks.com/comic/9997732/the-avengers-omnibus-vol-4-hc","c":"9997732","k":"the-avengers-omnibus-vol-4"},
-    {"t":"The Avengers Omnibus Vol. 5","u":"https://leagueofcomicgeeks.com/comic/7552595/the-avengers-omnibus-vol-5-hc","c":"7552595","k":"the-avengers-omnibus-vol-5"},
-    {"t":"The Avengers Omnibus Vol. 6","u":"https://leagueofcomicgeeks.com/comic/4201771/the-avengers-omnibus-vol-6-hc","c":"4201771","k":"the-avengers-omnibus-vol-6"},
-    {"t":"Guardians of the Galaxy Epic Collection: Homecoming","u":"https://leagueofcomicgeeks.com/comic/3068017/guardians-of-the-galaxy-epic-collection-homecoming-tp","c":"3068017","k":"guardians-of-the-galaxy-epic-collection-homecoming"}
-  ]},
-  {"num":"II","name":"THE 1980S","books":[
-    {"t":"Luke Cage Epic Collection: The Fire This Time","u":"https://leagueofcomicgeeks.com/comic/4419946/luke-cage-epic-collection-the-fire-this-time-tp","c":"4419946","k":"luke-cage-epic-collection-the-fire-this-time"},
-    {"t":"Power Man and Iron Fist Epic Collection: Heroes for Hire","u":"https://leagueofcomicgeeks.com/comic/4939011/power-man-and-iron-fist-epic-collection-heroes-for-hire-tp","c":"4939011","k":"power-man-and-iron-fist-epic-collection-heroes-for-hire"},
-    {"t":"Power Man and Iron Fist Epic Collection: Revenge","u":"https://leagueofcomicgeeks.com/comic/1839257/power-man-and-iron-fist-epic-collection-revenge-tp","c":"1839257","k":"power-man-and-iron-fist-epic-collection-revenge"},
-    {"t":"Uncanny X-Men Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/1449157/uncanny-x-men-omnibus-vol-1-hc?variant=3836252","c":"1449157","k":"uncanny-x-men-omnibus-vol-1"},
-    {"t":"Fantastic Four by John Byrne Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8033474/fantastic-four-by-john-byrne-omnibus-vol-1-hc?variant=3790838","c":"8033474","k":"fantastic-four-by-john-byrne-omnibus-vol-1"},
-    {"t":"Spider-Man by Roger Stern Omnibus","u":"https://leagueofcomicgeeks.com/comic/5781713/spider-man-by-roger-stern-omnibus-hc","c":"5781713","k":"spider-man-by-roger-stern-omnibus"},
-    {"t":"Daredevil by Frank Miller & Klaus Janson Omnibus","u":"https://leagueofcomicgeeks.com/comic/9364884/daredevil-by-frank-miller-klaus-janson-omnibus-hc?variant=2218780","c":"9364884","k":"daredevil-by-frank-miller-klaus-janson-omnibus"},
-    {"t":"Avengers: West Coast Avengers Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/9775755/avengers-west-coast-avengers-omnibus-vol-1-hc","c":"9775755","k":"avengers-west-coast-avengers-omnibus-vol-1"},
-    {"t":"Uncanny X-Men Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/8806419/uncanny-x-men-omnibus-vol-2-hc?variant=6199811","c":"8806419","k":"uncanny-x-men-omnibus-vol-2"},
-    {"t":"Fantastic Four by John Byrne Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/6459818/fantastic-four-by-john-byrne-omnibus-vol-2-hc?variant=8966418","c":"6459818","k":"fantastic-four-by-john-byrne-omnibus-vol-2"},
-    {"t":"The Amazing Spider-Man: The Saga of the Alien Costume","u":"https://leagueofcomicgeeks.com/comic/2262443/the-amazing-spider-man-the-saga-of-the-alien-costume-tp","c":"2262443","k":"the-amazing-spider-man-the-saga-of-the-alien-costume"},
-    {"t":"Marvel Super Heroes Secret Wars","u":"https://leagueofcomicgeeks.com/comic/6684355/marvel-super-heroes-secret-wars-tp-third-edition?variant=5363909","c":"6684355","k":"marvel-super-heroes-secret-wars"},
-    {"t":"Secret Wars II Omnibus","u":"https://leagueofcomicgeeks.com/comic/7311754/secret-wars-ii-omnibus-hc?variant=5540455","c":"7311754","k":"secret-wars-ii-omnibus"},
-    {"t":"The Avengers by John Byrne Omnibus","u":"https://leagueofcomicgeeks.com/comic/2353479/the-avengers-by-john-byrne-omnibus-hc","c":"2353479","k":"the-avengers-by-john-byrne-omnibus"},
-    {"t":"Wolverine Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/3697335/wolverine-omnibus-vol-1-hc?variant=6683232","c":"3697335","k":"wolverine-omnibus-vol-1"},
-    {"t":"X-Men Epic Collection: God Loves, Man Kills","u":"https://leagueofcomicgeeks.com/comic/6241683/x-men-epic-collection-god-loves-man-kills-tp","c":"6241683","k":"x-men-epic-collection-god-loves-man-kills"},
-    {"t":"Avengers: West Coast Avengers Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/7160040/avengers-west-coast-avengers-omnibus-vol-2-hc","c":"7160040","k":"avengers-west-coast-avengers-omnibus-vol-2"},
-    {"t":"Power Man and Iron Fist Epic Collection: Doombringer","u":"https://leagueofcomicgeeks.com/comic/7837937/power-man-and-iron-fist-epic-collection-doombringer-tp","c":"7837937","k":"power-man-and-iron-fist-epic-collection-doombringer"},
-    {"t":"Avengers: Under Siege","u":"https://leagueofcomicgeeks.com/comic/5068621/avengers-under-siege-hc","c":"5068621","k":"avengers-under-siege"},
-    {"t":"X-Men Epic Collection: Mutant Massacre","u":"https://leagueofcomicgeeks.com/comic/1548306/x-men-epic-collection-mutant-massacre-tp","c":"1548306","k":"x-men-epic-collection-mutant-massacre"},
-    {"t":"Daredevil: Born Again","u":"https://leagueofcomicgeeks.com/comic/4393619/daredevil-born-again-second-edition-tp?variant=2792947","c":"4393619","k":"daredevil-born-again"},
-    {"t":"Spider-Man: Kraven's Last Hunt","u":"https://leagueofcomicgeeks.com/comic/3886264/spider-man-kravens-last-hunt-deluxe-edition-hc","c":"3886264","k":"spider-man-kraven-s-last-hunt"},
-    {"t":"The Punisher Epic Collection: Circle of Blood","u":"https://leagueofcomicgeeks.com/comic/9403616/the-punisher-epic-collection-circle-of-blood-tp?variant=6085674","c":"9403616","k":"the-punisher-epic-collection-circle-of-blood"},
-    {"t":"Daredevil by Nocenti & Romita Jr. Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8532413/daredevil-by-nocenti-romita-jr-omnibus-vol-1-hc","c":"8532413","k":"daredevil-by-nocenti-romita-jr-omnibus-vol-1"},
-    {"t":"Power Man and Iron Fist Epic Collection: Hardball","u":"https://leagueofcomicgeeks.com/comic/4989703/power-man-and-iron-fist-epic-collection-hardball-tp","c":"4989703","k":"power-man-and-iron-fist-epic-collection-hardball"},
-    {"t":"Avengers: Assault on Olympus","u":"https://leagueofcomicgeeks.com/comic/8949491/avengers-assault-on-olympus-hc","c":"8949491","k":"avengers-assault-on-olympus"},
-    {"t":"Daredevil Epic Collection: A Touch of Typhoid","u":"https://leagueofcomicgeeks.com/comic/7476852/daredevil-epic-collection-a-touch-of-typhoid-tp","c":"7476852","k":"daredevil-epic-collection-a-touch-of-typhoid"},
-    {"t":"Daredevil by Nocenti & Romita Jr. Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/4645842/daredevil-by-nocenti-romita-jr-omnibus-vol-2-hc?variant=8289990","c":"4645842","k":"daredevil-by-nocenti-romita-jr-omnibus-vol-2"},
-    {"t":"X-Men Epic Collection: Fall of the Mutants","u":"https://leagueofcomicgeeks.com/comic/5959653/x-men-epic-collection-fall-of-the-mutants-tp","c":"5959653","k":"x-men-epic-collection-fall-of-the-mutants"},
-    {"t":"The Avengers: The Once and Future Kang","u":"https://leagueofcomicgeeks.com/comic/4364039/the-avengers-the-once-and-future-kang-tp","c":"4364039","k":"the-avengers-the-once-and-future-kang"},
-    {"t":"X-Men: Inferno Omnibus","u":"https://leagueofcomicgeeks.com/comic/7744796/x-men-inferno-omnibus-hc?variant=4309470","c":"7744796","k":"x-men-inferno-omnibus"},
-    {"t":"The Amazing Spider-Man by David Michelinie & Todd McFarlane Omnibus","u":"https://leagueofcomicgeeks.com/comic/8540109/the-amazing-spider-man-by-david-michelinie-todd-mcfarlane-omnibus-hc?variant=1689003","c":"8540109","k":"the-amazing-spider-man-by-david-michelinie-todd-mcfarlane-omnibus"}
-  ]},
-  {"num":"III","name":"THE 1990S","books":[
-    {"t":"Daredevil Epic Collection: The Man Without Fear","u":"https://leagueofcomicgeeks.com/comic/7991829/daredevil-epic-collection-the-man-without-fear-tp","c":"7991829","k":"daredevil-epic-collection-the-man-without-fear"},
-    {"t":"Fantastic Four Epic Collection: Into the Time Stream","u":"https://leagueofcomicgeeks.com/comic/4674078/fantastic-four-epic-collection-into-the-time-stream-tp","c":"4674078","k":"fantastic-four-epic-collection-into-the-time-stream"},
-    {"t":"X-Men by Chris Claremont & Jim Lee Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5664583/x-men-by-chris-claremont-jim-lee-omnibus-vol-1-hc","c":"5664583","k":"x-men-by-chris-claremont-jim-lee-omnibus-vol-1"},
-    {"t":"Fantastic Four Epic Collection: The New Fantastic Four","u":"https://leagueofcomicgeeks.com/comic/7538664/fantastic-four-epic-collection-the-new-fantastic-four-tp","c":"7538664","k":"fantastic-four-epic-collection-the-new-fantastic-four"},
-    {"t":"The Amazing Spider-Man by David Michelinie & Erik Larsen Omnibus","u":"https://leagueofcomicgeeks.com/comic/9957988/the-amazing-spider-man-by-david-michelinie-erik-larsen-omnibus-hc","c":"9957988","k":"the-amazing-spider-man-by-david-michelinie-erik-larsen-omnibus"},
-    {"t":"X-Men by Chris Claremont & Jim Lee Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/5664583/x-men-by-chris-claremont-jim-lee-omnibus-vol-1-hc?variant=5045890","c":"5664583","k":"x-men-by-chris-claremont-jim-lee-omnibus-vol-2"},
-    {"t":"The Avengers Epic Collection: Operation Galactic Storm","u":"https://leagueofcomicgeeks.com/comic/7111326/the-avengers-epic-collection-operation-galactic-storm-tp?variant=9796960","c":"7111326","k":"the-avengers-epic-collection-operation-galactic-storm"},
-    {"t":"The Avengers: The Gathering Omnibus","u":"https://leagueofcomicgeeks.com/comic/1767660/the-avengers-the-gathering-omnibus-hc","c":"1767660","k":"the-avengers-the-gathering-omnibus"},
-    {"t":"The Amazing Spider-Man by David Michelinie & Mark Bagley Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8229564/the-amazing-spider-man-by-david-michelinie-mark-bagley-omnibus-vol-1-hc","c":"8229564","k":"the-amazing-spider-man-by-david-michelinie-mark-bagley-omnibus-vol-1"},
-    {"t":"X-Men Epic Collection: X-Cutioner's Song","u":"https://leagueofcomicgeeks.com/comic/3027235/x-men-epic-collection-the-x-cutioners-song-tp","c":"3027235","k":"x-men-epic-collection-x-cutioner-s-song"},
-    {"t":"Punisher: King of Killers","u":"https://leagueofcomicgeeks.com/comic/4747791/punisher-king-of-killers-tp","c":"4747791","k":"punisher-king-of-killers"},
-    {"t":"Daredevil Epic Collection: Fall From Grace","u":"https://leagueofcomicgeeks.com/comic/5902276/daredevil-epic-collection-fall-from-grace-tp?variant=7105792","c":"5902276","k":"daredevil-epic-collection-fall-from-grace"},
-    {"t":"The Amazing Spider-Man by David Michelinie & Mark Bagley Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/3878103/the-amazing-spider-man-by-david-michelinie-mark-bagley-omnibus-vol-2-hc","c":"3878103","k":"the-amazing-spider-man-by-david-michelinie-mark-bagley-omnibus-vol-2"},
-    {"t":"X-Men Epic Collection: Fatal Attractions","u":"https://leagueofcomicgeeks.com/comic/6365365/x-men-epic-collection-fatal-attractions-tp","c":"6365365","k":"x-men-epic-collection-fatal-attractions"},
-    {"t":"Spider-Man: The Clone Saga Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/3703719/spider-man-the-clone-saga-omnibus-vol-1-hc?variant=2728002","c":"3703719","k":"spider-man-the-clone-saga-omnibus-vol-1"},
-    {"t":"Avengers: The Crossing Omnibus","u":"https://leagueofcomicgeeks.com/comic/2733101/avengers-the-crossing-omnibus-hc","c":"2733101","k":"avengers-the-crossing-omnibus"},
-    {"t":"Spider-Man: The Clone Saga Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/9197818/spider-man-the-clone-saga-omnibus-vol-2-hc?variant=4547313","c":"9197818","k":"spider-man-the-clone-saga-omnibus-vol-2"},
-    {"t":"X-Men: The Age of Apocalypse Omnibus","u":"https://leagueofcomicgeeks.com/comic/4477342/x-men-the-age-of-apocalypse-omnibus-hc","c":"4477342","k":"x-men-the-age-of-apocalypse-omnibus"},
-    {"t":"X-Men / Avengers: Onslaught Omnibus","u":"https://leagueofcomicgeeks.com/comic/4207596/x-men-avengers-onslaught-omnibus-hc","c":"4207596","k":"x-men-avengers-onslaught-omnibus"},
-    {"t":"Heroes Reborn Omnibus","u":"https://leagueofcomicgeeks.com/comic/8591938/heroes-reborn-omnibus-hc?variant=2682385","c":"8591938","k":"heroes-reborn-omnibus"},
-    {"t":"Thunderbolts Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8658604/thunderbolts-omnibus-vol-1-hc","c":"8658604","k":"thunderbolts-omnibus-vol-1"},
-    {"t":"Heroes Reborn: The Return Omnibus","u":"https://leagueofcomicgeeks.com/comic/4915628/heroes-reborn-the-return-omnibus-hc","c":"4915628","k":"heroes-reborn-the-return-omnibus"},
-    {"t":"Spider-Man by John Byrne Omnibus","u":"https://leagueofcomicgeeks.com/comic/2924017/spider-man-by-john-byrne-omnibus-hc","c":"2924017","k":"spider-man-by-john-byrne-omnibus"},
-    {"t":"Thunderbolts Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/8791111/thunderbolts-omnibus-vol-2-hc","c":"8791111","k":"thunderbolts-omnibus-vol-2"},
-    {"t":"Avengers Forever","u":"https://leagueofcomicgeeks.com/comic/2872803/avengers-forever-hc","c":"2872803","k":"avengers-forever"}
-  ]},
-  {"num":"IV","name":"EARLY 2000S","books":[
-    {"t":"The Avengers by Kurt Busiek & George Pérez Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/9708872/the-avengers-by-kurt-busiek-george-perez-omnibus-vol-1-hc","c":"9708872","k":"the-avengers-by-kurt-busiek-george-p-rez-omnibus-vol-1"},
-    {"t":"The Avengers: Ultron Unlimited","u":"https://leagueofcomicgeeks.com/comic/9409450/the-avengers-ultron-unlimited-tp","c":"9409450","k":"the-avengers-ultron-unlimited"},
-    {"t":"Alias Omnibus","u":"https://leagueofcomicgeeks.com/comic/6683638/alias-omnibus-hc?variant=2806039","c":"6683638","k":"alias-omnibus"},
-    {"t":"Fantastic Four by Mark Waid Vol. 1","u":"https://leagueofcomicgeeks.com/comic/9468561/fantastic-four-by-mark-waid-vol-1-hc","c":"9468561","k":"fantastic-four-by-mark-waid-vol-1"},
-    {"t":"The Avengers by Kurt Busiek & George Pérez Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/4113382/the-avengers-by-kurt-busiek-george-perez-omnibus-vol-2-hc","c":"4113382","k":"the-avengers-by-kurt-busiek-george-p-rez-omnibus-vol-2"},
-    {"t":"Fantastic Four by Mark Waid Vol. 2","u":"https://leagueofcomicgeeks.com/comic/1863461/fantastic-four-by-mark-waid-vol-2-hc","c":"1863461","k":"fantastic-four-by-mark-waid-vol-2"},
-    {"t":"Punisher Max by Garth Ennis Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/1836762/punisher-max-by-garth-ennis-omnibus-vol-1-hc","c":"1836762","k":"punisher-max-by-garth-ennis-omnibus-vol-1"},
-    {"t":"The Avengers: The Kang Dynasty","u":"https://leagueofcomicgeeks.com/comic/8244452/the-avengers-the-kang-dynasty-tp?variant=1736099","c":"8244452","k":"the-avengers-the-kang-dynasty"},
-    {"t":"Fantastic Four by Mark Waid Vol. 3","u":"https://leagueofcomicgeeks.com/comic/4162262/fantastic-four-by-mark-waid-vol-3-hc","c":"4162262","k":"fantastic-four-by-mark-waid-vol-3"},
-    {"t":"The Amazing Spider-Man by J. Michael Straczynski Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/6983244/the-amazing-spider-man-by-j-michael-straczynski-omnibus-vol-1-hc","c":"6983244","k":"the-amazing-spider-man-by-j-michael-straczynski-omnibus-vol-1"},
-    {"t":"Fantastic Four by J. Michael Straczynski Vol. 1","u":"https://leagueofcomicgeeks.com/comic/7015914/fantastic-four-by-j-michael-straczynski-mike-mckone-vol-1-tp","c":"7015914","k":"fantastic-four-by-j-michael-straczynski-vol-1"},
-    {"t":"Punisher Max by Garth Ennis Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/2493075/punisher-max-by-garth-ennis-omnibus-vol-2-hc","c":"2493075","k":"punisher-max-by-garth-ennis-omnibus-vol-2"},
-    {"t":"The Avengers by Johns & Coipel Omnibus","u":"https://leagueofcomicgeeks.com/comic/2841928/the-avengers-by-johns-coipel-omnibus-hc","c":"2841928","k":"the-avengers-by-johns-coipel-omnibus"},
-    {"t":"New X-Men Omnibus","u":"https://leagueofcomicgeeks.com/comic/2779595/new-x-men-omnibus-hc?variant=1475532","c":"2779595","k":"new-x-men-omnibus"},
-    {"t":"Astonishing X-Men by Whedon & Cassaday Omnibus","u":"https://leagueofcomicgeeks.com/comic/2354446/astonishing-x-men-by-whedon-cassaday-omnibus-hc?variant=7310079","c":"2354446","k":"astonishing-x-men-by-whedon-cassaday-omnibus"}
-  ]},
-  {"num":"V","name":"DISASSEMBLED TO AVENGERS VS. X-MEN","books":[
-    {"t":"Avengers Disassembled","u":"https://leagueofcomicgeeks.com/comic/1885243/marvel-the-legendary-collection-vol-35-avengers-disassembled-hc","c":"1885243","k":"avengers-disassembled"},
-    {"t":"New Avengers by Brian Michael Bendis Vol. 1","u":"https://leagueofcomicgeeks.com/comic/4768682/new-avengers-by-brian-michael-bendis-vol-1-hc","c":"4768682","k":"new-avengers-by-brian-michael-bendis-vol-1"},
-    {"t":"Jessica Jones: The Pulse - The Complete Collection","u":"https://leagueofcomicgeeks.com/comic/6757644/jessica-jones-the-pulse-the-complete-collection-tp","c":"6757644","k":"jessica-jones-the-pulse-the-complete-collection"},
-    {"t":"The New Avengers Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/1944290/the-new-avengers-omnibus-vol-1-hc","c":"1944290","k":"the-new-avengers-omnibus-vol-1"},
-    {"t":"House of M Omnibus","u":"https://leagueofcomicgeeks.com/comic/6246880/house-of-m-omnibus-hc","c":"6246880","k":"house-of-m-omnibus"},
-    {"t":"Annihilation Omnibus","u":"https://leagueofcomicgeeks.com/comic/8534550/annihilation-omnibus-hc?variant=6238204","c":"8534550","k":"annihilation-omnibus"},
-    {"t":"The Amazing Spider-Man by J. Michael Straczynski Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/8389454/the-amazing-spider-man-by-j-michael-straczynski-omnibus-vol-2-hc","c":"8389454","k":"the-amazing-spider-man-by-j-michael-straczynski-omnibus-vol-2"},
-    {"t":"Civil War","u":"https://leagueofcomicgeeks.com/comic/5003155/civil-war-hc","c":"5003155","k":"civil-war"},
-    {"t":"Civil War: Fantastic Four","u":"https://leagueofcomicgeeks.com/comic/5449257/civil-war-fantastic-four-hc","c":"5449257","k":"civil-war-fantastic-four"},
-    {"t":"The New Avengers Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/1306764/the-new-avengers-omnibus-vol-2-hc","c":"1306764","k":"the-new-avengers-omnibus-vol-2"},
-    {"t":"The Amazing Spider-Man: Brand New Day Vol. 1","u":"https://leagueofcomicgeeks.com/comic/4906030/the-amazing-spider-man-brand-new-day-vol-1-hc","c":"4906030","k":"the-amazing-spider-man-brand-new-day-vol-1"},
-    {"t":"Young Avengers by Allan Heinberg & Jim Cheung Omnibus","u":"https://leagueofcomicgeeks.com/comic/3394498/young-avengers-by-allan-heinberg-jim-cheung-omnibus-hc","c":"3394498","k":"young-avengers-by-allan-heinberg-jim-cheung-omnibus"},
-    {"t":"Annihilation: Conquest Omnibus","u":"https://leagueofcomicgeeks.com/comic/5057451/annihilation-conquest-omnibus-hc?variant=8425041","c":"5057451","k":"annihilation-conquest-omnibus"},
-    {"t":"The Amazing Spider-Man: Brand New Day Vol. 2","u":"https://leagueofcomicgeeks.com/comic/2018618/the-amazing-spider-man-brand-new-day-vol-2-hc","c":"2018618","k":"the-amazing-spider-man-brand-new-day-vol-2"},
-    {"t":"X-Men: The Messiah Trilogy Omnibus","u":"https://leagueofcomicgeeks.com/comic/2110852/x-men-the-messiah-trilogy-omnibus-hc?variant=1822316","c":"2110852","k":"x-men-the-messiah-trilogy-omnibus"},
-    {"t":"The Amazing Spider-Man: Brand New Day Vol. 3","u":"https://leagueofcomicgeeks.com/comic/4218690/the-amazing-spider-man-brand-new-day-vol-3-hc","c":"4218690","k":"the-amazing-spider-man-brand-new-day-vol-3"},
-    {"t":"Guardians of the Galaxy by Dan Abnett & Andy Lanning Omnibus","u":"https://leagueofcomicgeeks.com/comic/6480936/guardians-of-the-galaxy-by-dan-abnett-andy-lanning-omnibus-hc","c":"6480936","k":"guardians-of-the-galaxy-by-dan-abnett-andy-lanning-omnibus"},
-    {"t":"The Amazing Spider-Man: New Ways to Die","u":"https://leagueofcomicgeeks.com/comic/2192430/the-amazing-spider-man-new-ways-to-die-hc","c":"2192430","k":"the-amazing-spider-man-new-ways-to-die"},
-    {"t":"Secret Invasion by Brian Michael Bendis Omnibus","u":"https://leagueofcomicgeeks.com/comic/1765707/secret-invasion-by-brian-michael-bendis-omnibus-hc","c":"1765707","k":"secret-invasion-by-brian-michael-bendis-omnibus"},
-    {"t":"Thunderbolts: Dark Reign Omnibus","u":"https://leagueofcomicgeeks.com/comic/6311602/thunderbolts-dark-reign-omnibus-hc","c":"6311602","k":"thunderbolts-dark-reign-omnibus"},
-    {"t":"Guardians of the Galaxy Modern Era Epic Collection: War of Kings","u":"https://leagueofcomicgeeks.com/comic/4037754/guardians-of-the-galaxy-modern-era-epic-collection-war-of-kings-tp","c":"4037754","k":"guardians-of-the-galaxy-modern-era-epic-collection-war-of-kings"},
-    {"t":"The New Avengers Omnibus Vol. 3","u":"https://leagueofcomicgeeks.com/comic/3291719/the-new-avengers-omnibus-vol-3-hc","c":"3291719","k":"the-new-avengers-omnibus-vol-3"},
-    {"t":"Fantastic Four by Jonathan Hickman Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8636978/fantastic-four-by-jonathan-hickman-omnibus-vol-1-hc?variant=7272276","c":"8636978","k":"fantastic-four-by-jonathan-hickman-omnibus-vol-1"},
-    {"t":"Daredevil: Shadowland","u":"https://leagueofcomicgeeks.com/comic/9629673/daredevil-shadowland-hc","c":"9629673","k":"daredevil-shadowland"},
-    {"t":"War of Kings Aftermath: Realm of Kings Omnibus","u":"https://leagueofcomicgeeks.com/comic/6125821/war-of-kings-aftermath-realm-of-kings-omnibus-hc","c":"6125821","k":"war-of-kings-aftermath-realm-of-kings-omnibus"},
-    {"t":"Heroes for Hire by Abnett & Lanning: The Complete Collection","u":"https://leagueofcomicgeeks.com/comic/5314031/heroes-for-hire-by-abnett-lanning-the-complete-collection-tp","c":"5314031","k":"heroes-for-hire-by-abnett-lanning"},
-    {"t":"The Thanos Imperative","u":"https://leagueofcomicgeeks.com/comic/9091267/the-ultimate-graphic-novels-collection-the-thanos-imperative","c":"9091267","k":"the-thanos-imperative"},
-    {"t":"The Amazing Spider-Man: Big Time","u":"https://leagueofcomicgeeks.com/comic/9847960/the-amazing-spider-man-big-time-hc","c":"9847960","k":"the-amazing-spider-man-big-time"},
-    {"t":"The Avengers by Brian Michael Bendis: The Complete Collection Vol. 1","u":"https://leagueofcomicgeeks.com/comic/7945120/the-avengers-by-brian-michael-bendis-the-complete-collection-vol-1-tp","c":"7945120","k":"the-avengers-by-brian-michael-bendis-the-complete-collection-vol-1"},
-    {"t":"Fantastic Four by Jonathan Hickman Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/9855787/fantastic-four-by-jonathan-hickman-omnibus-vol-2-hc","c":"9855787","k":"fantastic-four-by-jonathan-hickman-omnibus-vol-2"},
-    {"t":"The Avengers by Brian Michael Bendis: The Complete Collection Vol. 2","u":"https://leagueofcomicgeeks.com/comic/7371832/the-avengers-by-brian-michael-bendis-the-complete-collection-vol-2-tp","c":"7371832","k":"the-avengers-by-brian-michael-bendis-the-complete-collection-vol-2"},
-    {"t":"The Amazing Spider-Man Modern Era Epic Collection: Spider-Island","u":"https://leagueofcomicgeeks.com/comic/5654466/the-amazing-spider-man-modern-era-epic-collection-spider-island-tp","c":"5654466","k":"the-amazing-spider-man-modern-era-epic-collection-spider-island"},
-    {"t":"X-Men: Schism","u":"https://leagueofcomicgeeks.com/comic/2486494/x-men-schism-hc","c":"2486494","k":"x-men-schism"},
-    {"t":"Wolverine and the X-Men by Jason Aaron Omnibus","u":"https://leagueofcomicgeeks.com/comic/3510305/wolverine-and-the-x-men-by-jason-aaron-omnibus-hc?variant=5102323","c":"3510305","k":"wolverine-and-the-x-men-by-jason-aaron-omnibus"},
-    {"t":"The Avengers by Brian Michael Bendis: The Complete Collection Vol. 3","u":"https://leagueofcomicgeeks.com/comic/9962101/the-avengers-by-brian-michael-bendis-the-complete-collection-vol-3-tp","c":"9962101","k":"the-avengers-by-brian-michael-bendis-the-complete-collection-vol-3"},
-    {"t":"Young Avengers: The Children's Crusade","u":"https://leagueofcomicgeeks.com/comic/9697818/young-avengers-by-heinberg-cheung-the-childrens-crusade-tp","c":"9697818","k":"young-avengers-the-children-s-crusade"},
-    {"t":"Avengers vs. X-Men Omnibus","u":"https://leagueofcomicgeeks.com/comic/8283183/avengers-vs-x-men-omnibus-hc","c":"8283183","k":"avengers-vs-x-men-omnibus"}
-  ]},
-  {"num":"VI","name":"MARVEL NOW! TO SECRET WARS","books":[
-    {"t":"Thor by Jason Aaron Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8075270/thor-by-jason-aaron-omnibus-vol-1-hc?variant=3357569","c":"8075270","k":"jason-aaron-thor-vol-1"},
-    {"t":"Thor by Jason Aaron Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/5310877/thor-by-jason-aaron-omnibus-vol-2-hc","c":"5310877","k":"jason-aaron-thor-vol-2"},
-    {"t":"All-New X-Men Vol. 1: Yesterday's X-Men","u":"https://leagueofcomicgeeks.com/comic/3521347/all-new-x-men-vol-1-yesterdays-x-men-tp","c":"3521347","k":"all-new-x-men-vol-1-yesterday-s-x-men"},
-    {"t":"Defenders by Matt Fraction Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5553276/defenders-by-matt-fraction-vol-1-tp","c":"5553276","k":"defenders-by-matt-fraction-vol-1"},
-    {"t":"Defenders by Matt Fraction Vol. 2","u":"https://leagueofcomicgeeks.com/comic/6821453/defenders-vol-2-tp","c":"6821453","k":"defenders-by-matt-fraction-vol-2"},
-    {"t":"Uncanny X-Men Vol. 1: Revolution","u":"https://leagueofcomicgeeks.com/comic/1614205/uncanny-x-men-vol-1-revolution-tp","c":"1614205","k":"uncanny-x-men-vol-1-revolution"},
-    {"t":"Guardians of the Galaxy by Brian Michael Bendis Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5341753/guardians-of-the-galaxy-by-brian-michael-bendis-omnibus-vol-1-hc","c":"5341753","k":"guardians-of-the-galaxy-by-brian-michael-bendis-omnibus-vol-1"},
-    {"t":"Superior Spider-Man Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/6992588/superior-spider-man-omnibus-vol-1-hc","c":"6992588","k":"superior-spider-man-omnibus-vol-1"},
-    {"t":"Hawkeye by Fraction & Aja Omnibus","u":"https://leagueofcomicgeeks.com/comic/9666463/hawkeye-by-fraction-aja-omnibus-hc","c":"9666463","k":"hawkeye-by-fraction-aja-omnibus"},
-    {"t":"Avengers by Jonathan Hickman Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/2137752/avengers-by-jonathan-hickman-omnibus-vol-1-hc","c":"2137752","k":"avengers-by-jonathan-hickman-omnibus-vol-1"},
-    {"t":"All-New X-Men Vol. 2: Here to Stay","u":"https://leagueofcomicgeeks.com/comic/9092822/all-new-x-men-vol-2-here-to-stay-tp","c":"9092822","k":"all-new-x-men-vol-2-here-to-stay"},
-    {"t":"Uncanny X-Men Vol. 2: Broken","u":"https://leagueofcomicgeeks.com/comic/3783802/uncanny-x-men-vol-2-broken-tp","c":"3783802","k":"uncanny-x-men-vol-2-broken"},
-    {"t":"The Superior Foes of Spider-Man Omnibus","u":"https://leagueofcomicgeeks.com/comic/7605029/the-superior-foes-of-spider-man-omnibus-hc","c":"7605029","k":"the-superior-foes-of-spider-man-omnibus"},
-    {"t":"All-New X-Men Vol. 3: Out of Their Depth","u":"https://leagueofcomicgeeks.com/comic/4746368/all-new-x-men-vol-3-out-of-their-depth-tp","c":"4746368","k":"all-new-x-men-vol-3-out-of-their-depth"},
-    {"t":"Uncanny X-Men Vol. 3: The Good, the Bad, the Inhuman","u":"https://leagueofcomicgeeks.com/comic/7072279/uncanny-x-men-vol-3-the-good-the-bad-the-inhuman-tp","c":"7072279","k":"uncanny-x-men-vol-3-the-good-the-bad-the-inhuman"},
-    {"t":"X-Men: Battle of the Atom","u":"https://leagueofcomicgeeks.com/comic/2621900/x-men-battle-of-the-atom-tp","c":"2621900","k":"x-men-battle-of-the-atom"},
-    {"t":"Infinity","u":"https://leagueofcomicgeeks.com/comic/1617776/infinity-hc","c":"1617776","k":"infinity"},
-    {"t":"Guardians of the Galaxy by Brian Michael Bendis Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/7971765/guardians-of-the-galaxy-by-brian-michael-bendis-omnibus-vol-2-hc","c":"7971765","k":"guardians-of-the-galaxy-by-brian-michael-bendis-omnibus-vol-2"},
-    {"t":"All-New X-Men Vol. 4: All-Different","u":"https://leagueofcomicgeeks.com/comic/1657131/all-new-x-men-vol-4-all-different-tp","c":"1657131","k":"all-new-x-men-vol-4-all-different"},
-    {"t":"Uncanny X-Men Vol. 4: Vs. S.H.I.E.L.D.","u":"https://leagueofcomicgeeks.com/comic/3482854/uncanny-x-men-vol-4-vs-shield-tp","c":"3482854","k":"uncanny-x-men-vol-4-vs-s-h-i-e-l-d"},
-    {"t":"The Amazing Spider-Man Vol. 1: The Parker Luck","u":"https://leagueofcomicgeeks.com/comic/3862098/the-amazing-spider-man-vol-1-the-parker-luck-tp","c":"3862098","k":"the-amazing-spider-man-vol-1-the-parker-luck"},
-    {"t":"Guardians of the Galaxy/All-New X-Men: The Trial of Jean Grey","u":"https://leagueofcomicgeeks.com/comic/9821573/guardians-of-the-galaxy-all-new-x-men-the-trial-of-jean-grey-tp","c":"9821573","k":"guardians-of-the-galaxy-all-new-x-men-the-trial-of-jean-grey"},
-    {"t":"The Amazing Spider-Man Vol. 1.1: Learning to Crawl","u":"https://leagueofcomicgeeks.com/comic/3881168/the-amazing-spider-man-vol-11-learning-to-crawl-tp","c":"3881168","k":"the-amazing-spider-man-vol-1-1-learning-to-crawl"},
-    {"t":"All-New X-Men Vol. 5: One Down","u":"https://leagueofcomicgeeks.com/comic/9582487/all-new-x-men-vol-5-one-down-tp","c":"9582487","k":"all-new-x-men-vol-5-one-down"},
-    {"t":"Uncanny X-Men Vol. 5: The Omega Mutant","u":"https://leagueofcomicgeeks.com/comic/3148316/uncanny-x-men-vol-5-the-omega-mutant-tp","c":"3148316","k":"uncanny-x-men-vol-5-the-omega-mutant"},
-    {"t":"Avengers by Jonathan Hickman Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/5347899/avengers-by-jonathan-hickman-omnibus-vol-2-hc","c":"5347899","k":"avengers-by-jonathan-hickman-omnibus-vol-2"},
-    {"t":"The Amazing Spider-Man Vol. 2: Spider-Verse Prelude","u":"https://leagueofcomicgeeks.com/comic/7173559/the-amazing-spider-man-vol-2-spider-verse-prelude-tp","c":"7173559","k":"the-amazing-spider-man-vol-2-spider-verse-prelude"},
-    {"t":"All-New X-Men Vol. 6: Ultimate Adventure","u":"https://leagueofcomicgeeks.com/comic/8414474/all-new-x-men-vol-6-ultimate-adventure-tp","c":"8414474","k":"all-new-x-men-vol-6-ultimate-adventure"},
-    {"t":"Uncanny X-Men Vol. 6: Storyville","u":"https://leagueofcomicgeeks.com/comic/5381165/uncanny-x-men-vol-6-storyville-tp","c":"5381165","k":"uncanny-x-men-vol-6-storyville"},
-    {"t":"The Amazing Spider-Man Vol. 3: Spider-Verse","u":"https://leagueofcomicgeeks.com/comic/4888851/the-amazing-spider-man-vol-3-spider-verse-tp","c":"4888851","k":"the-amazing-spider-man-vol-3-spider-verse"},
-    {"t":"All-New X-Men Vol. 7: The Utopians","u":"https://leagueofcomicgeeks.com/comic/3744216/all-new-x-men-vol-7-the-utopians-tp","c":"3744216","k":"all-new-x-men-vol-7-the-utopians"},
-    {"t":"Guardians of the Galaxy & X-Men: The Black Vortex","u":"https://leagueofcomicgeeks.com/comic/7312158/guardians-of-the-galaxy-x-men-the-black-vortex-hc","c":"7312158","k":"guardians-of-the-galaxy-x-men-the-black-vortex"},
-    {"t":"The Amazing Spider-Man Vol. 4: Graveyard Shift","u":"https://leagueofcomicgeeks.com/comic/2458226/the-amazing-spider-man-vol-4-graveyard-shift-tp","c":"2458226","k":"the-amazing-spider-man-vol-4-graveyard-shift"},
-    {"t":"The Amazing Spider-Man Vol. 5: Spiral","u":"https://leagueofcomicgeeks.com/comic/6556066/the-amazing-spider-man-vol-5-spiral-tp","c":"6556066","k":"the-amazing-spider-man-vol-5-spiral"},
-    {"t":"Secret Wars by Jonathan Hickman Omnibus","u":"https://leagueofcomicgeeks.com/comic/9142038/secret-wars-by-jonathan-hickman-omnibus-hc","c":"9142038","k":"secret-wars-by-jonathan-hickman-omnibus"}
-  ]},
-  {"num":"VII","name":"ALL-NEW, ALL-DIFFERENT & RESURRXION","books":[
-    {"t":"All-New, All-Different Avengers Vol. 1: The Magnificent Seven","u":"https://leagueofcomicgeeks.com/comic/4082971/all-new-all-different-avengers-vol-1-the-magnificent-seven-tp","c":"4082971","k":"all-new-all-different-avengers-vol-1-the-magnificent-seven"},
-    {"t":"All-New Wolverine Omnibus","u":"https://leagueofcomicgeeks.com/comic/2851051/all-new-wolverine-by-tom-taylor-omnibus-hc","c":"2851051","k":"all-new-all-wolverine-tom-taylor"},
-    {"t":"Moon Knight by Lemire & Smallwood","u":"https://leagueofcomicgeeks.com/comic/5490527/moon-knight-by-lemire-smallwood-the-complete-collection-tp","c":"5490527","k":"moon-knight-by-lemire-smallwood-the-complete-collection"},
-    {"t":"Daredevil by Charles Soule Omnibus","u":"https://leagueofcomicgeeks.com/comic/1613152/daredevil-by-charles-soule-omnibus-hc?variant=3620015","c":"1613152","k":"daredevil-by-charles-soule-omnibus"},
-    {"t":"Power Man and Iron Fist Vol. 1: The Boys Are Back In Town","u":"https://leagueofcomicgeeks.com/comic/2429788/power-man-and-iron-fist-vol-1-the-boys-are-back-in-town-tp","c":"2429788","k":"power-man-and-iron-fist-vol-1-the-boys-are-back-in-town"},
-    {"t":"Extraordinary X-Men Vol. 1: X-Haven","u":"https://leagueofcomicgeeks.com/comic/6065598/extraordinary-x-men-vol-1-x-haven-tp","c":"6065598","k":"extraordinary-x-men-vol-1-x-haven"},
-    {"t":"The Amazing Spider-Man: Worldwide Vol. 1","u":"https://leagueofcomicgeeks.com/comic/7564937/the-amazing-spider-man-worldwide-vol-4-tp","c":"7564937","k":"the-amazing-spider-man-worldwide-vol-1"},
-    {"t":"Guardians of the Galaxy by Gerry Duggan Omnibus","u":"https://leagueofcomicgeeks.com/comic/7659234/guardians-of-the-galaxy-by-gerry-duggan-omnibus-hc","c":"7659234","k":"guardians-of-the-galaxy-by-gerry-duggan-omnibus"},
-    {"t":"All-New, All-Different Avengers Vol. 2: Family Business","u":"https://leagueofcomicgeeks.com/comic/7606714/all-new-all-different-avengers-vol-2-family-business-tp","c":"7606714","k":"all-new-all-different-avengers-vol-2-family-business"},
-    {"t":"Nova: Resurrection","u":"https://leagueofcomicgeeks.com/comic/4114226/nova-resurrection-tp","c":"4114226","k":"nova-resurrection"},
-    {"t":"Extraordinary X-Men Vol. 2: Apocalypse Wars","u":"https://leagueofcomicgeeks.com/comic/9123187/extraordinary-x-men-vol-2-apocalypse-wars-tp","c":"9123187","k":"extraordinary-x-men-vol-2-apocalypse-wars"},
-    {"t":"Power Man and Iron Fist Vol. 2: Civil War II","u":"https://leagueofcomicgeeks.com/comic/1939205/power-man-and-iron-fist-vol-2-civil-war-ii-tp","c":"1939205","k":"power-man-and-iron-fist-vol-2-civil-war-ii"},
-    {"t":"The Amazing Spider-Man: Worldwide Vol. 2","u":"https://leagueofcomicgeeks.com/comic/4868236/the-amazing-spider-man-worldwide-vol-2-hc","c":"4868236","k":"the-amazing-spider-man-worldwide-vol-2"},
-    {"t":"All-New, All-Different Avengers Vol. 3: Civil War II","u":"https://leagueofcomicgeeks.com/comic/5611410/all-new-all-different-avengers-vol-3-civil-war-ii-tp","c":"5611410","k":"all-new-all-different-avengers-vol-3-civil-war-ii"},
-    {"t":"Power Man and Iron Fist Vol. 3: Street Magic","u":"https://leagueofcomicgeeks.com/comic/3115619/power-man-and-iron-fist-vol-3-street-magic-tp","c":"3115619","k":"power-man-and-iron-fist-vol-3-street-magic"},
-    {"t":"The Defenders Vol. 1: Diamonds Are Forever","u":"https://leagueofcomicgeeks.com/comic/5704283/the-defenders-vol-1-diamonds-are-forever-tp?variant=9245895","c":"5704283","k":"the-defenders-vol-1-diamonds-are-forever"},
-    {"t":"Extraordinary X-Men Vol. 3: Kingdoms Fall","u":"https://leagueofcomicgeeks.com/comic/1549365/extraordinary-x-men-vol-3-kingdoms-fall-tp","c":"1549365","k":"extraordinary-x-men-vol-3-kingdoms-fall"},
-    {"t":"The Amazing Spider-Man: Worldwide Vol. 3","u":"https://leagueofcomicgeeks.com/comic/2684454/the-amazing-spider-man-worldwide-vol-3-hc","c":"2684454","k":"the-amazing-spider-man-worldwide-vol-3"},
-    {"t":"Defenders Vol. 2: Kingpins of New York","u":"https://leagueofcomicgeeks.com/comic/1407725/defenders-vol-2-kingpins-of-new-york-tp","c":"1407725","k":"defenders-vol-2-kingpins-of-new-york"},
-    {"t":"Extraordinary X-Men Vol. 4: IVX (Inhumans vs. X-Men)","u":"https://leagueofcomicgeeks.com/comic/3991997/extraordinary-x-men-vol-4-ivx-tp","c":"3991997","k":"extraordinary-x-men-vol-4-ivx-inhumans-vs-x-men"},
-    {"t":"Champions Vol. 1: Change the World","u":"https://leagueofcomicgeeks.com/comic/1568946/champions-vol-1-change-the-world-tp","c":"1568946","k":"champions-vol-1-change-the-world"},
-    {"t":"Champions Vol. 2: The Freelancer Lifestyle","u":"https://leagueofcomicgeeks.com/comic/8801909/champions-vol-2-the-freelancer-lifestyle-tp","c":"8801909","k":"champions-vol-2-the-freelancer-lifestyle"},
-    {"t":"X-Men Gold Vol. 0: Homecoming","u":"https://leagueofcomicgeeks.com/comic/3916425/x-men-gold-vol-0-homecoming-tp","c":"3916425","k":"x-men-gold-vol-0-homecoming"},
-    {"t":"X-Men Gold Vol. 1: Back to Basics","u":"https://leagueofcomicgeeks.com/comic/1323043/x-men-gold-vol-1-back-to-basics-tp","c":"1323043","k":"x-men-gold-vol-1-back-to-basics"},
-    {"t":"X-Men Blue Vol. 1: Strangest","u":"https://leagueofcomicgeeks.com/comic/4361457/x-men-blue-vol-1-strangest-tp","c":"4361457","k":"x-men-blue-vol-1-strangest"},
-    {"t":"X-Men Gold Vol. 2: Evil Empires","u":"https://leagueofcomicgeeks.com/comic/3207094/x-men-gold-vol-2-evil-empires-tp","c":"3207094","k":"x-men-gold-vol-2-evil-empires"},
-    {"t":"X-Men Blue Vol. 2: Toil and Trouble","u":"https://leagueofcomicgeeks.com/comic/3202085/x-men-blue-vol-2-toil-and-trouble-tp","c":"3202085","k":"x-men-blue-vol-2-toil-and-trouble"},
-    {"t":"Marvel 2-In-One Vol. 1: Fate of the Four","u":"https://leagueofcomicgeeks.com/comic/2748588/marvel-2-in-one-vol-1-fate-of-the-four-tp","c":"2748588","k":"marvel-2-in-one-vol-1-fate-of-the-four"},
-    {"t":"Secret Empire","u":"https://leagueofcomicgeeks.com/comic/1739105/secret-empire-hc","c":"1739105","k":"secret-empire"},
-    {"t":"Champions Vol. 3: Champion For A Day","u":"https://leagueofcomicgeeks.com/comic/4532965/champions-vol-3-champion-for-a-day-tp","c":"4532965","k":"champions-vol-3-champion-for-a-day"},
-    {"t":"Marvel 2-In-One Vol. 2: Next of Kin","u":"https://leagueofcomicgeeks.com/comic/3638033/marvel-2-in-one-vol-2-next-of-kin-tp","c":"3638033","k":"marvel-2-in-one-vol-2-next-of-kin"},
-    {"t":"X-Men Blue Vol. 3: Cross Time Capers","u":"https://leagueofcomicgeeks.com/comic/6276838/x-men-blue-vol-3-cross-time-capers-tp","c":"6276838","k":"x-men-blue-vol-3-cross-time-capers"},
-    {"t":"X-Men Gold Vol. 3: Mojo Worldwide","u":"https://leagueofcomicgeeks.com/comic/9901314/x-men-gold-vol-3-mojo-worldwide-tp","c":"9901314","k":"x-men-gold-vol-3-mojo-worldwide"},
-    {"t":"The Amazing Spider-Man: Red Goblin","u":"https://leagueofcomicgeeks.com/comic/2464391/the-amazing-spider-man-red-goblin-hc","c":"2464391","k":"the-amazing-spider-man-red-goblin"},
-    {"t":"X-Men Gold Vol. 4: The Negative Zone War","u":"https://leagueofcomicgeeks.com/comic/4170849/x-men-gold-vol-4-the-negative-zone-war-tp","c":"4170849","k":"x-men-gold-vol-4-the-negative-zone-war"},
-    {"t":"X-Men Blue Vol. 4: Cry Havok","u":"https://leagueofcomicgeeks.com/comic/9040300/x-men-blue-vol-4-cry-havok-tp","c":"9040300","k":"x-men-blue-vol-4-cry-havok"},
-    {"t":"Champions Vol. 4: Northern Lights","u":"https://leagueofcomicgeeks.com/comic/4571398/champions-vol-4-northern-lights-tp","c":"4571398","k":"champions-vol-4-northern-lights"},
-    {"t":"X-Men Gold Vol. 5: Cruel and Unusual","u":"https://leagueofcomicgeeks.com/comic/7520185/x-men-gold-vol-5-cruel-and-unusual-tp","c":"7520185","k":"x-men-gold-vol-5-cruel-and-unusual"},
-    {"t":"X-Men Blue Vol. 5: Surviving the Experience","u":"https://leagueofcomicgeeks.com/comic/4404630/x-men-blue-vol-5-surviving-the-experience-tp","c":"4404630","k":"x-men-blue-vol-5-surviving-the-experience"},
-    {"t":"Champions Vol. 5: Weird War One","u":"https://leagueofcomicgeeks.com/comic/1922195/champions-vol-5-weird-war-one-tp","c":"1922195","k":"champions-vol-5-weird-war-one"},
-    {"t":"X-Men Gold Vol. 6: 'Til Death Do Us Part","u":"https://leagueofcomicgeeks.com/comic/3989854/x-men-gold-vol-6-til-death-do-us-part-tp","c":"3989854","k":"x-men-gold-vol-6-til-death-do-us-part"},
-    {"t":"X-Men Gold Vol. 7: Godwar","u":"https://leagueofcomicgeeks.com/comic/1744975/x-men-gold-vol-7-godwar-tp","c":"1744975","k":"x-men-gold-vol-7-godwar"},
-    {"t":"Phoenix Resurrection: The Return of Jean Grey","u":"https://leagueofcomicgeeks.com/comic/2926327/phoenix-resurrection-the-return-of-jean-grey-tp","c":"2926327","k":"phoenix-resurrection-the-return-of-jean-grey"},
-    {"t":"X-Men Red Vol. 1: The Hate Machine","u":"https://leagueofcomicgeeks.com/comic/1997793/x-men-red-vol-1-the-hate-machine-tp","c":"1997793","k":"x-men-red-vol-1-the-hate-machine"},
-    {"t":"X-Men Red Vol. 2: Waging Peace","u":"https://leagueofcomicgeeks.com/comic/6098590/x-men-red-vol-2-waging-peace-tp","c":"6098590","k":"x-men-red-vol-2-waging-peace"},
-    {"t":"Hunt for Wolverine","u":"https://leagueofcomicgeeks.com/comic/7125136/hunt-for-wolverine-hc","c":"7125136","k":"hunt-for-wolverine"},
-    {"t":"Return of Wolverine","u":"https://leagueofcomicgeeks.com/comic/7005080/return-of-wolverine-tp","c":"7005080","k":"return-of-wolverine"},
-    {"t":"Avengers: No Surrender / No Road Home Omnibus","u":"https://leagueofcomicgeeks.com/comic/6044489/avengers-no-surrender-no-road-home-omnibus-hc","c":"6044489","k":"avengers-no-surrender-no-road-home-omnibus"}
-  ]},
-  {"num":"VIII","name":"FRESH START & THE KRAKOAN DAWN","books":[
-    {"t":"Avengers by Jason Aaron Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8370836/avengers-by-jason-aaron-vol-1-hc","c":"8370836","k":"avengers-by-jason-aaron-vol-1"},
-    {"t":"Venomnibus by Cates & Stegman","u":"https://leagueofcomicgeeks.com/comic/1711453/venomnibus-by-cates-stegman-hc","c":"1711453","k":"venomnibus-by-cates-stegman"},
-    {"t":"Daredevil by Chip Zdarsky Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/1982795/daredevil-by-chip-zdarsky-omnibus-vol-1-hc","c":"1982795","k":"daredevil-by-chip-zdarsky-omnibus-vol-1"},
-    {"t":"House of X / Powers of X","u":"https://leagueofcomicgeeks.com/comic/6272769/house-of-x-powers-of-x-hc","c":"6272769","k":"house-of-x-powers-of-x"},
-    {"t":"The Amazing Spider-Man by Nick Spencer Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/3456997/the-amazing-spider-man-by-nick-spencer-omnibus-vol-1-hc","c":"3456997","k":"the-amazing-spider-man-by-nick-spencer-omnibus-vol-1"},
-    {"t":"Avengers by Jason Aaron Vol. 2","u":"https://leagueofcomicgeeks.com/comic/5867545/avengers-by-jason-aaron-vol-2-hc","c":"5867545","k":"avengers-by-jason-aaron-vol-2"},
-    {"t":"X-Men: Age of Krakoa - Dawn of X Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/2588536/x-men-age-of-krakoa-dawn-of-x-omnibus-vol-1-hc","c":"2588536","k":"x-men-age-of-krakoa-dawn-of-x-omnibus-vol-1"},
-    {"t":"King in Black","u":"https://leagueofcomicgeeks.com/comic/1275973/king-in-black-tp","c":"1275973","k":"king-in-black"},
-    {"t":"Empyre Omnibus","u":"https://leagueofcomicgeeks.com/comic/8524702/empyre-omnibus-hc","c":"8524702","k":"empyre-omnibus"},
-    {"t":"X-Men: Age of Krakoa - Dawn of X Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/2390448/x-men-age-of-krakoa-dawn-of-x-omnibus-vol-2-hc","c":"2390448","k":"x-men-age-of-krakoa-dawn-of-x-omnibus-vol-2"},
-    {"t":"The Amazing Spider-Man by Nick Spencer Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/9331948/the-amazing-spider-man-by-nick-spencer-omnibus-vol-2-hc","c":"9331948","k":"the-amazing-spider-man-by-nick-spencer-omnibus-vol-2"},
-    {"t":"Guardians of the Galaxy Vol. 1: Then It's Us","u":"https://leagueofcomicgeeks.com/comic/5631498/guardians-of-the-galaxy-vol-1-then-its-us-tp","c":"5631498","k":"guardians-of-the-galaxy-vol-1-then-its-us"},
-    {"t":"Daredevil by Chip Zdarsky Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/1982795/daredevil-by-chip-zdarsky-omnibus-vol-1-hc?variant=2187422","c":"1982795","k":"daredevil-by-chip-zdarsky-omnibus-vol-2"},
-    {"t":"Avengers by Jason Aaron Vol. 3","u":"https://leagueofcomicgeeks.com/comic/3723244/avengers-by-jason-aaron-vol-3-hc","c":"3723244","k":"avengers-by-jason-aaron-vol-3"},
-    {"t":"X of Swords","u":"https://leagueofcomicgeeks.com/comic/3412992/x-of-swords-hc","c":"3412992","k":"x-of-swords"},
-    {"t":"The Amazing Spider-Man Vol. 9: Sins Rising","u":"https://leagueofcomicgeeks.com/comic/4884436/the-amazing-spider-man-vol-9-sins-rising-tp","c":"4884436","k":"the-amazing-spider-man-vol-9-sins-rising"},
-    {"t":"Avengers by Jason Aaron Vol. 4","u":"https://leagueofcomicgeeks.com/comic/9680887/avengers-by-jason-aaron-vol-4-hc","c":"9680887","k":"avengers-by-jason-aaron-vol-4"},
-    {"t":"Guardians of the Galaxy Vol. 2: Here We Make Our Stand","u":"https://leagueofcomicgeeks.com/comic/3160592/guardians-of-the-galaxy-vol-2-here-we-make-our-stand-tp","c":"3160592","k":"guardians-of-the-galaxy-vol-2-here-we-make-our-stand"},
-    {"t":"War of the Realms","u":"https://leagueofcomicgeeks.com/comic/9505542/the-war-of-the-realms-omnibus-hc?variant=8204904","c":"9505542","k":"war-of-the-realms"},
-    {"t":"X-Men: Age of Krakoa - Reign of X Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5681420/x-men-age-of-krakoa-reign-of-x-omnibus-vol-1-hc","c":"5681420","k":"x-men-age-of-krakoa-reign-of-x-omnibus-vol-1"},
-    {"t":"The Amazing Spider-Man: Last Remains Companion","u":"https://leagueofcomicgeeks.com/comic/9521076/the-amazing-spider-man-last-remains-companion-tp","c":"9521076","k":"the-amazing-spider-man-last-remains-companion"},
-    {"t":"X-Men: Age of Krakoa - Reign of X Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/8788582/x-men-age-of-krakoa-reign-of-x-omnibus-vol-2-hc","c":"8788582","k":"x-men-age-of-krakoa-reign-of-x-omnibus-vol-2"},
-    {"t":"X-Men: Hellfire Gala (2021)","u":"https://leagueofcomicgeeks.com/comic/5928285/x-men-hellfire-gala-tp","c":"5928285","k":"x-men-hellfire-gala-2021"},
-    {"t":"Sinister War","u":"https://leagueofcomicgeeks.com/comic/9071025/sinister-war-tp","c":"9071025","k":"sinister-war"},
-    {"t":"Guardians of the Galaxy Vol. 3: We're Super Heroes","u":"https://leagueofcomicgeeks.com/comic/1232450/guardians-of-the-galaxy-vol-3-were-super-heroes-tp","c":"1232450","k":"guardians-of-the-galaxy-vol-3-were-super-heroes"},
-    {"t":"The Last Annihilation","u":"https://leagueofcomicgeeks.com/comic/5935299/the-last-annihilation-tp","c":"5935299","k":"the-last-annihilation"},
-    {"t":"Trials of X Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8964150/trials-of-x-vol-1-tp","c":"8964150","k":"trials-of-x-vol-1"},
-    {"t":"Trials of X Vol. 2","u":"https://leagueofcomicgeeks.com/comic/4291080/trials-of-x-vol-2-tp","c":"4291080","k":"trials-of-x-vol-2"},
-    {"t":"Trials of X Vol. 3","u":"https://leagueofcomicgeeks.com/comic/2326684/trials-of-x-vol-3-tp","c":"2326684","k":"trials-of-x-vol-3"},
-    {"t":"Trials of X Vol. 4","u":"https://leagueofcomicgeeks.com/comic/8153637/trials-of-x-vol-4-tp","c":"8153637","k":"trials-of-x-vol-4"},
-    {"t":"Trials of X Vol. 5","u":"https://leagueofcomicgeeks.com/comic/1246133/trials-of-x-vol-5-tp","c":"1246133","k":"trials-of-x-vol-5"},
-    {"t":"Trials of X Vol. 6","u":"https://leagueofcomicgeeks.com/comic/4905203/trials-of-x-vol-6-tp","c":"4905203","k":"trials-of-x-vol-6"},
-    {"t":"Trials of X Vol. 7","u":"https://leagueofcomicgeeks.com/comic/9368931/trials-of-x-vol-7-tp","c":"9368931","k":"trials-of-x-vol-7"},
-    {"t":"Trials of X Vol. 8","u":"https://leagueofcomicgeeks.com/comic/7817233/trials-of-x-vol-8-tp","c":"7817233","k":"trials-of-x-vol-8"},
-    {"t":"Trials of X Vol. 9","u":"https://leagueofcomicgeeks.com/comic/9553958/trials-of-x-vol-9-tp","c":"9553958","k":"trials-of-x-vol-9"},
-    {"t":"Trials of X Vol. 10","u":"https://leagueofcomicgeeks.com/comic/5189618/trials-of-x-vol-10-tp","c":"5189618","k":"trials-of-x-vol-10"},
-    {"t":"Trials of X Vol. 11","u":"https://leagueofcomicgeeks.com/comic/3312318/trials-of-x-vol-11-tp","c":"3312318","k":"trials-of-x-vol-11"},
-    {"t":"Trials of X Vol. 12","u":"https://leagueofcomicgeeks.com/comic/6757512/trials-of-x-vol-12-tp","c":"6757512","k":"trials-of-x-vol-12"},
-    {"t":"Inferno","u":"https://leagueofcomicgeeks.com/comic/7842968/inferno-tp","c":"7842968","k":"inferno"},
-    {"t":"The X Lives & X Deaths of Wolverine","u":"https://leagueofcomicgeeks.com/comic/6460796/the-x-lives-x-deaths-of-wolverine-tp","c":"6460796","k":"the-x-lives-x-deaths-of-wolverine"},
-    {"t":"Avengers by Jason Aaron Vol. 5","u":"https://leagueofcomicgeeks.com/comic/5733929/avengers-by-jason-aaron-vol-5-hc","c":"5733929","k":"avengers-by-jason-aaron-vol-5"}
-  ]},
-  {"num":"IX","name":"DESTINY OF X & JUDGMENT DAY","books":[
-    {"t":"Devil's Reign","u":"https://leagueofcomicgeeks.com/comic/4833823/devils-reign-tp","c":"4833823","k":"devils-reign"},
-    {"t":"Moon Knight by Jed MacKay Omnibus","u":"https://leagueofcomicgeeks.com/comic/3220183/moon-knight-by-jed-mackay-omnibus-hc","c":"3220183","k":"moon-knight-by-jed-mackay-omnibus"},
-    {"t":"X-Men by Gerry Duggan Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5647422/x-men-by-gerry-duggan-vol-1-tp","c":"5647422","k":"x-men-by-gerry-duggan-vol-1"},
-    {"t":"X-Men by Gerry Duggan Vol. 2","u":"https://leagueofcomicgeeks.com/comic/9768363/x-men-by-gerry-duggan-vol-2-tp","c":"9768363","k":"x-men-by-gerry-duggan-vol-2"},
-    {"t":"Fantastic Four by Ryan North Vol. 1: Whatever Happened to the Fantastic Four?","u":"https://leagueofcomicgeeks.com/comic/1410991/fantastic-four-by-ryan-north-vol-1-whatever-happened-to-the-fantastic-four-tp","c":"1410991","k":"fantastic-four-by-ryan-north-vol-1-whatever-happened"},
-    {"t":"The Amazing Spider-Man: Beyond Omnibus","u":"https://leagueofcomicgeeks.com/comic/6031009/the-amazing-spider-man-beyond-omnibus-hc?variant=1738507","c":"6031009","k":"the-amazing-spider-man-beyond-omnibus"},
-    {"t":"X-Men by Gerry Duggan Vol. 3","u":"https://leagueofcomicgeeks.com/comic/5658625/x-men-by-gerry-duggan-vol-3-tp","c":"5658625","k":"x-men-by-gerry-duggan-vol-3"},
-    {"t":"Immortal X-Men by Kieron Gillen Vol. 1","u":"https://leagueofcomicgeeks.com/comic/4492050/immortal-x-men-by-kieron-gillen-vol-1-tp","c":"4492050","k":"immortal-x-men-by-kieron-gillen-vol-1"},
-    {"t":"Fantastic Four by Ryan North Vol. 2: Four Stories About Hope","u":"https://leagueofcomicgeeks.com/comic/8747433/fantastic-four-by-ryan-north-vol-2-four-stories-about-hope-tp","c":"8747433","k":"fantastic-four-by-ryan-north-vol-2-four-stories-about-hope"},
-    {"t":"The Amazing Spider-Man by Zeb Wells Omnibus Vol. 1","u":"https://leagueofcomicgeeks.com/comic/8492777/the-amazing-spider-man-by-zeb-wells-omnibus-vol-1-hc","c":"8492777","k":"the-amazing-spider-man-by-zeb-wells-omnibus-vol-1"},
-    {"t":"Immortal X-Men by Kieron Gillen Vol. 2","u":"https://leagueofcomicgeeks.com/comic/6221915/immortal-x-men-by-kieron-gillen-vol-2-tp","c":"6221915","k":"immortal-x-men-by-kieron-gillen-vol-2"},
-    {"t":"X-Men Red by Al Ewing Vol. 1","u":"https://leagueofcomicgeeks.com/comic/2109383/x-men-red-by-al-ewing-vol-1-tp","c":"2109383","k":"x-men-red-by-al-ewing-vol-1"},
-    {"t":"X-Men Red by Al Ewing Vol. 2","u":"https://leagueofcomicgeeks.com/comic/4912807/x-men-red-by-al-ewing-vol-2-tp","c":"4912807","k":"x-men-red-by-al-ewing-vol-2"},
-    {"t":"Legion of X by Simon Spurrier Vol. 1","u":"https://leagueofcomicgeeks.com/comic/3712256/legion-of-x-by-simon-spurrier-vol-1-tp","c":"3712256","k":"legion-of-x-by-simon-spurrier-vol-1"},
-    {"t":"Legion of X by Simon Spurrier Vol. 2","u":"https://leagueofcomicgeeks.com/comic/5837913/legion-of-x-by-simon-spurrier-vol-2-tp","c":"5837913","k":"legion-of-x-by-simon-spurrier-vol-2"},
-    {"t":"Fantastic Four by Ryan North Vol. 3: The Impossible Is Probable","u":"https://leagueofcomicgeeks.com/comic/5613466/fantastic-four-by-ryan-north-vol-3-the-impossible-is-probable-tp","c":"5613466","k":"fantastic-four-by-ryan-north-vol-3-the-impossible-is-probable"},
-    {"t":"Marauders by Steve Orlando Vol. 1","u":"https://leagueofcomicgeeks.com/comic/5831279/marauders-by-steve-orlando-vol-1-tp","c":"5831279","k":"marauders-by-steve-orlando-vol-1"},
-    {"t":"Marauders by Steve Orlando Vol. 2","u":"https://leagueofcomicgeeks.com/comic/7656444/marauders-by-steve-orlando-vol-2-tp","c":"7656444","k":"marauders-by-steve-orlando-vol-2"},
-    {"t":"X-Force by Benjamin Percy Vol. 5 & 6","u":"https://leagueofcomicgeeks.com/comic/8209404/x-force-by-benjamin-percy-vol-5-tp","c":"8209404","k":"x-force-by-benjamin-percy-vol-5-6"},
-    {"t":"X-Force by Benjamin Percy Vol. 7","u":"https://leagueofcomicgeeks.com/comic/4498769/x-force-by-benjamin-percy-vol-7-tp","c":"4498769","k":"x-force-by-benjamin-percy-vol-7"},
-    {"t":"A.X.E.: Judgment Day","u":"https://leagueofcomicgeeks.com/comic/5885955/axe-judgment-day-tp","c":"5885955","k":"a-x-e-judgment-day"},
-    {"t":"Sins of Sinister","u":"https://leagueofcomicgeeks.com/comic/6843991/sins-of-sinister-tp","c":"6843991","k":"sins-of-sinister"},
-    {"t":"X-Men by Gerry Duggan Vol. 4","u":"https://leagueofcomicgeeks.com/comic/6699438/x-men-by-gerry-duggan-vol-4-tp","c":"6699438","k":"x-men-by-gerry-duggan-vol-4"},
-    {"t":"X-Men by Gerry Duggan Vol. 5","u":"https://leagueofcomicgeeks.com/comic/6242693/x-men-by-gerry-duggan-vol-5-tp","c":"6242693","k":"x-men-by-gerry-duggan-vol-5"},
-    {"t":"X-Men by Gerry Duggan Vol. 6","u":"https://leagueofcomicgeeks.com/comic/6946957/x-men-by-gerry-duggan-vol-6-tp","c":"6946957","k":"x-men-by-gerry-duggan-vol-6"},
-    {"t":"Immortal X-Men by Kieron Gillen Vol. 3","u":"https://leagueofcomicgeeks.com/comic/1672442/immortal-x-men-by-kieron-gillen-vol-3-tp","c":"1672442","k":"immortal-x-men-by-kieron-gillen-vol-3"},
-    {"t":"X-Men Red by Al Ewing Vol. 3","u":"https://leagueofcomicgeeks.com/comic/3262907/x-men-red-by-al-ewing-vol-3-tp","c":"3262907","k":"x-men-red-by-al-ewing-vol-3"}
-  ]},
-  {"num":"X","name":"FALL OF X","books":[
-    {"t":"X-Men: Hellfire Gala - Fall of X","u":"https://leagueofcomicgeeks.com/comic/8035688/x-men-hellfire-gala-fall-of-x-tp","c":"8035688","k":"x-men-hellfire-gala-fall-of-x"},
-    {"t":"Immortal X-Men by Kieron Gillen Vol. 4","u":"https://leagueofcomicgeeks.com/comic/1517036/immortal-x-men-by-kieron-gillen-vol-4-tp","c":"1517036","k":"immortal-x-men-by-kieron-gillen-vol-4"},
-    {"t":"Guardians of the Galaxy Vol. 1: Grootfall","u":"https://leagueofcomicgeeks.com/comic/2528319/guardians-of-the-galaxy-vol-1-grootfall-tp","c":"2528319","k":"guardians-of-the-galaxy-vol-1-grootfall"},
-    {"t":"X-Men Red by Al Ewing Vol. 4","u":"https://leagueofcomicgeeks.com/comic/6769966/x-men-red-by-al-ewing-vol-4-tp","c":"6769966","k":"x-men-red-by-al-ewing-vol-4"},
-    {"t":"Wolverine by Benjamin Percy Vol. 7","u":"https://leagueofcomicgeeks.com/comic/9822447/wolverine-by-benjamin-percy-vol-7-tp","c":"9822447","k":"wolverine-by-benjamin-percy-vol-7"},
-    {"t":"The Amazing Spider-Man by Zeb Wells Omnibus Vol. 2","u":"https://leagueofcomicgeeks.com/comic/6587226/the-amazing-spider-man-by-zeb-wells-omnibus-vol-2-hc","c":"6587226","k":"the-amazing-spider-man-by-zeb-wells-omnibus-vol-2"},
-    {"t":"Wolverine by Benjamin Percy Vol. 8: Sabretooth War Part 1","u":"https://leagueofcomicgeeks.com/comic/5820636/wolverine-by-benjamin-percy-vol-8-sabretooth-war-part-1-tp","c":"5820636","k":"wolverine-by-benjamin-percy-vol-8-sabretooth-war-part-1"},
-    {"t":"Wolverine by Benjamin Percy Vol. 9: Sabretooth War Part 2","u":"https://leagueofcomicgeeks.com/comic/4241587/wolverine-by-benjamin-percy-vol-9-sabretooth-war-part-2-tp","c":"4241587","k":"wolverine-by-benjamin-percy-vol-9-sabretooth-war-part-2"},
-    {"t":"Rogue & Gambit: Power Play","u":"https://leagueofcomicgeeks.com/comic/7863051/rogue-gambit-power-play-tp","c":"7863051","k":"rogue-gambit-power-play"},
-    {"t":"Uncanny Spider-Man: Fall of X","u":"https://leagueofcomicgeeks.com/comic/4600542/uncanny-spider-man-fall-of-x-tp","c":"4600542","k":"uncanny-spider-man-fall-of-x"},
-    {"t":"Fantastic Four by Ryan North Vol. 4: Fortune Favors the Fantastic","u":"https://leagueofcomicgeeks.com/comic/3474271/fantastic-four-by-ryan-north-vol-4-fortune-favors-the-fantastic-tp","c":"3474271","k":"fantastic-four-by-ryan-north-vol-4-fortune-favors"},
-    {"t":"Resurrection of Magneto","u":"https://leagueofcomicgeeks.com/comic/6228297/resurrection-of-magneto-tp","c":"6228297","k":"resurrection-of-magneto"},
-    {"t":"The Amazing Spider-Man Vol. 9: Gang War","u":"https://leagueofcomicgeeks.com/comic/8905945/the-amazing-spider-man-vol-9-gang-war-tp","c":"8905945","k":"the-amazing-spider-man-vol-9-gang-war"},
-    {"t":"Daredevil: Gang War","u":"https://leagueofcomicgeeks.com/comic/9367254/daredevil-gang-war-tp","c":"9367254","k":"daredevil-gang-war"},
-    {"t":"Guardians of the Galaxy Vol. 2: Grootrise","u":"https://leagueofcomicgeeks.com/comic/6336777/guardians-of-the-galaxy-vol-2-grootrise-tp","c":"6336777","k":"guardians-of-the-galaxy-vol-2-grootrise"},
-    {"t":"Luke Cage: Gang War","u":"https://leagueofcomicgeeks.com/comic/9661823/luke-cage-gang-war-tp","c":"9661823","k":"luke-cage-gang-war"},
-    {"t":"Fall of the House of X / Rise of the Powers of X","u":"https://leagueofcomicgeeks.com/comic/6141826/fall-of-the-house-of-x-rise-of-the-powers-of-x-omnibus-hc","c":"6141826","k":"fall-of-the-house-of-x-rise-of-the-powers-of-x"},
-    {"t":"Fantastic Four by Ryan North Vol. 5: Aliens, Ghosts, and Alternate Earths","u":"https://leagueofcomicgeeks.com/comic/8409104/fantastic-four-by-ryan-north-vol-5-aliens-ghosts-and-alternate-earths-tp","c":"8409104","k":"fantastic-four-by-ryan-north-vol-5-aliens-ghosts"},
-    {"t":"Immortal X-Men Vol. 5: X-Men Forever","u":"https://leagueofcomicgeeks.com/comic/3580949/immortal-x-men-vol-5-x-men-forever-tp","c":"3580949","k":"immortal-x-men-vol-5-x-men-forever"},
-    {"t":"Dead X-Men","u":"https://leagueofcomicgeeks.com/comic/5721448/dead-x-men-tp","c":"5721448","k":"dead-x-men"}
-  ]},
-  {"num":"XI","name":"THE MODERN ERA","books":[
-    {"t":"The Avengers by Jed MacKay Omnibus","u":"https://leagueofcomicgeeks.com/comic/8719744/the-avengers-by-jed-mackay-omnibus-hc","c":"8719744","k":"the-avengers-by-jed-mackay-omnibus"},
-    {"t":"X-Men by Jed MacKay Vol. 1: Homecoming","u":"https://leagueofcomicgeeks.com/comic/2266238/x-men-by-jed-mackay-vol-1-homecoming-tp","c":"2266238","k":"x-men-by-jed-mackay-vol-1-homecoming"},
-    {"t":"Uncanny X-Men by Gail Simone Vol. 1: Red Wave","u":"https://leagueofcomicgeeks.com/comic/9927517/uncanny-x-men-by-gail-simone-vol-1-red-wave-tp","c":"9927517","k":"uncanny-x-men-by-gail-simone-vol-1-red-wave"},
-    {"t":"Exceptional X-Men by Eve L. Ewing Vol. 1: Duty Calls","u":"https://leagueofcomicgeeks.com/comic/7591477/exceptional-x-men-by-eve-l-ewing-vol-1-duty-calls-tp","c":"7591477","k":"exceptional-x-men-by-eve-l-ewing-vol-1-duty-calls"},
-    {"t":"Wolverine by Saladin Ahmed Vol. 1: In the Bones","u":"https://leagueofcomicgeeks.com/comic/7008684/wolverine-by-saladin-ahmed-vol-1-in-the-bones-tp","c":"7008684","k":"wolverine-by-saladin-ahmed-vol-1-in-the-bones"},
-    {"t":"X-Force by Geoffrey Thorne Vol. 1: Fractures","u":"https://leagueofcomicgeeks.com/comic/4809585/x-force-by-geoffrey-thorne-vol-1-fractures-tp","c":"4809585","k":"x-force-by-geoffrey-thorne-vol-1-fractures"},
-    {"t":"Thunderbolts: Worldstrike","u":"https://leagueofcomicgeeks.com/comic/2208668/thunderbolts-worldstrike-tp","c":"2208668","k":"thunderbolts-worldstrike"},
-    {"t":"X-Men by Jed MacKay Vol. 2: Hostile Takeover","u":"https://leagueofcomicgeeks.com/comic/2643671/x-men-by-jed-mackay-vol-2-hostile-takeover-tp","c":"2643671","k":"x-men-by-jed-mackay-vol-2-hostile-takeover"},
-    {"t":"Uncanny X-Men by Gail Simone Vol. 2: The Dark Artery","u":"https://leagueofcomicgeeks.com/comic/3188517/uncanny-x-men-by-gail-simone-vol-2-the-dark-artery-tp","c":"3188517","k":"uncanny-x-men-by-gail-simone-vol-2-the-dark-artery"},
-    {"t":"Exceptional X-Men by Eve L. Ewing Vol. 2: The Deep End","u":"https://leagueofcomicgeeks.com/comic/6962134/exceptional-x-men-by-eve-l-ewing-vol-2-the-deep-end-tp","c":"6962134","k":"exceptional-x-men-by-eve-l-ewing-vol-2-the-deep-end"},
-    {"t":"Wolverine by Saladin Ahmed Vol. 2: Call of the Adamantine","u":"https://leagueofcomicgeeks.com/comic/1736010/wolverine-by-saladin-ahmed-vol-2-call-of-the-adamantine-tp","c":"1736010","k":"wolverine-by-saladin-ahmed-vol-2-call-of-the-adamantine"},
-    {"t":"The Amazing Spider-Man by Joe Kelly Vol. 1: Get Back Up","u":"https://leagueofcomicgeeks.com/comic/3362260/the-amazing-spider-man-vol-1-get-back-up-tp","c":"3362260","k":"the-amazing-spider-man-by-joe-kelly-vol-1-get-back-up"},
-    {"t":"X-Men by Jed MacKay Vol. 3: The Hellfire Vigil","u":"https://leagueofcomicgeeks.com/comic/9473278/x-men-by-jed-mackay-vol-3-the-hellfire-vigil-tp","c":"9473278","k":"x-men-by-jed-mackay-vol-3-the-hellfire-vigil"},
-    {"t":"The Amazing Spider-Man by Joe Kelly Vol. 2: Through the Gates of Hell","u":"https://leagueofcomicgeeks.com/comic/6536306/the-amazing-spider-man-vol-2-through-the-gates-of-hell-tp","c":"6536306","k":"the-amazing-spider-man-by-joe-kelly-vol-2-through-the-gates-of-hell"},
-    {"t":"Uncanny X-Men by Gail Simone Vol. 3","u":"https://leagueofcomicgeeks.com/comic/3188517/uncanny-x-men-by-gail-simone-vol-2-the-dark-artery-tp","c":"3188517","k":"uncanny-x-men-by-gail-simone-vol-3"},
-    {"t":"Wolverine by Saladin Ahmed Vol. 3: Mutant Protector","u":"https://leagueofcomicgeeks.com/comic/9941258/wolverine-by-saladin-ahmed-vol-3-mutant-protector-tp","c":"9941258","k":"wolverine-by-saladin-ahmed-vol-3-mutant-protector"},
-    {"t":"The Amazing Spider-Man by Joe Kelly Vol. 3: Resolute","u":"https://leagueofcomicgeeks.com/comic/7127352/the-amazing-spider-man-vol-3-resolute-tp","c":"7127352","k":"the-amazing-spider-man-by-joe-kelly-vol-3-resolute"},
-    {"t":"Wolverine by Saladin Ahmed Vol. 4: Clash of the Champions","u":"https://leagueofcomicgeeks.com/comic/6549558/wolverine-by-saladin-ahmed-vol-4-clash-of-the-champions-tp","c":"6549558","k":"wolverine-by-saladin-ahmed-vol-4-clash-of-the-champions"},
-    {"t":"Fantastic Four by Ryan North Vol. 6: Our World Under Doom","u":"https://leagueofcomicgeeks.com/comic/9291290/fantastic-four-by-ryan-north-vol-6-our-world-under-doom-tp","c":"9291290","k":"fantastic-four-by-ryan-north-vol-6-our-world-under-doom"},
-    {"t":"X-Men: Age of Revelation - Book of Revelation","u":"https://leagueofcomicgeeks.com/comic/6036494/x-men-age-of-revelation-book-of-revelation-tp","c":"6036494","k":"x-men-age-of-revelation-book-of-revelation"},
-    {"t":"The Amazing Spider-Man by Joe Kelly Vol. 4: Broken","u":"https://leagueofcomicgeeks.com/comic/5109877/the-amazing-spider-man-vol-4-broken-tp","c":"5109877","k":"the-amazing-spider-man-by-joe-kelly-vol-4-broken"},
-    {"t":"X-Men by Jed MacKay Vol. 4: Age of Revelation Aftermath","u":"https://leagueofcomicgeeks.com/comic/3589163/x-men-by-jed-mackay-vol-4-age-of-revelation-aftermath-tp","c":"3589163","k":"x-men-by-jed-mackay-vol-4-age-of-revelation-aftermath"},
-    {"t":"Uncanny X-Men by Gail Simone Vol. 4: Where Monsters Dwell","u":"https://leagueofcomicgeeks.com/comic/2745001/uncanny-x-men-by-gail-simone-vol-4-where-monsters-dwell-tp","c":"2745001","k":"uncanny-x-men-by-gail-simone-vol-4-where-monsters-dwell"},
-    {"t":"Thunderbolts: Doomstrike","u":"https://leagueofcomicgeeks.com/comic/6281422/thunderbolts-doomstrike-tp","c":"6281422","k":"thunderbolts-doomstrike"},
-    {"t":"One World Under Doom Omnibus","u":"https://leagueofcomicgeeks.com/comic/7942794/one-world-under-doom-omnibus-hc","c":"7942794","k":"one-world-under-doom-omnibus"},
-    {"t":"Imperial","u":"https://leagueofcomicgeeks.com/comic/2192736/imperial-tp","c":"2192736","k":"imperial"}
+  {"num":"0","name":"Season One","books":[
+    {"t":"Fantastic Four: Season One","u":"https://leagueofcomicgeeks.com/comic/6753256/fantastic-four-season-one-hc","c":"6753256","k":"fantastic-four-season-one","tags":["Fantastic Four"]},
+    {"t":"X-Men: Season One","u":"https://leagueofcomicgeeks.com/comic/9936039/x-men-season-one-hc","c":"9936039","k":"x-men-season-one","tags":["X-Men"]}
   ]}
 ];
 
-const STORAGE_KEY = 'axm-reading-tracker-v1';
-const CUSTOM_DATA_KEY = 'axm-custom-order-v1';
-const CHECKLISTS_KEY = 'axm-issue-checklists-v1';
+const STORAGE_KEY = 'axm-reading-tracker-v4';
+const CUSTOM_DATA_KEY = 'axm-custom-order-v4';
+const CHECKLISTS_KEY = 'axm-issue-checklists-v4';
+const THEME_KEY = 'axm-theme-v4';
+const DISABLED_TAGS_KEY = 'axm-disabled-tags-v4';
 
 let progress = {};
-try{
-  const raw = localStorage.getItem(STORAGE_KEY);
-  progress = raw ? JSON.parse(raw) : {};
-}catch(e){ progress = {}; }
-
-function saveProgress(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){}
-}
+try{ progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ progress = {}; }
+function saveProgress(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){} }
 
 let checklists = {};
-try{
-  const rawC = localStorage.getItem(CHECKLISTS_KEY);
-  checklists = rawC ? JSON.parse(rawC) : {};
-}catch(e){ checklists = {}; }
+try{ checklists = JSON.parse(localStorage.getItem(CHECKLISTS_KEY)) || {}; }catch(e){ checklists = {}; }
+function saveChecklists(){ try{ localStorage.setItem(CHECKLISTS_KEY, JSON.stringify(checklists)); }catch(e){} }
 
-function saveChecklists(){
-  try{ localStorage.setItem(CHECKLISTS_KEY, JSON.stringify(checklists)); }catch(e){}
-}
+let disabledTags = {};
+try{ disabledTags = JSON.parse(localStorage.getItem(DISABLED_TAGS_KEY)) || {}; }catch(e){ disabledTags = {}; }
+function saveDisabledTags(){ try{ localStorage.setItem(DISABLED_TAGS_KEY, JSON.stringify(disabledTags)); }catch(e){} }
 
 let DATA = DEFAULT_DATA;
 try{
@@ -1140,15 +978,18 @@ try{
     const parsed = JSON.parse(rawD);
     if(Array.isArray(parsed) && parsed.length) DATA = parsed;
   }
-}catch(e){ /* fall back to default */ }
+}catch(e){}
 
 let TOTAL = DATA.reduce((n,p)=>n+p.books.length,0);
 document.getElementById('totalCount').textContent = TOTAL;
 document.getElementById('defaultOrderBtn').style.display = (DATA !== DEFAULT_DATA) ? '' : 'none';
 
 let activePhase = 'ALL';
+const washiColors = ['#c99a3e','#b5402f','#3f6b78','#8a7a4a','#a4552f','#e88293','#168a48'];
 
-const washiColors = ['#c99a3e','#b5402f','#3f6b78','#8a7a4a','#a4552f'];
+function triggerHaptic(){
+  if(navigator.vibrate) navigator.vibrate(18);
+}
 
 function checkSvg(){
   return `<svg viewBox="0 0 26 26" aria-hidden="true">
@@ -1160,14 +1001,13 @@ function checkSvg(){
 function stampSvg(idx){
   const rot = (idx % 5) - 2;
   return `<svg class="stamp" viewBox="0 0 100 100" aria-hidden="true">
-    <circle cx="50" cy="50" r="44" fill="none" stroke="#f5efe2" stroke-width="3" stroke-dasharray="7 5" opacity="0.9"/>
-    <text x="50" y="46" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#f5efe2" transform="rotate(${rot} 50 50)">CUT</text>
-    <text x="50" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#f5efe2" opacity="0.85" transform="rotate(${rot} 50 50)">FROM THE MAT</text>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="var(--paper)" stroke-width="3" stroke-dasharray="7 5" opacity="0.9"/>
+    <text x="50" y="46" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="var(--paper)" transform="rotate(${rot} 50 50)">CUT</text>
+    <text x="50" y="62" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--paper)" opacity="0.85" transform="rotate(${rot} 50 50)">FROM THE MAT</text>
   </svg>`;
 }
 
 function stitchSvg(){
-  // wavy dashed line, hand-drawn feel
   let d = 'M0,4 ';
   const w = 1200, seg = 24;
   for(let x=0;x<=w;x+=seg){
@@ -1185,6 +1025,14 @@ function coverUrl(id){
 
 function slugAnchor(num){ return 'phase-' + num; }
 
+function getAllTags(){
+  const set = new Set();
+  DATA.forEach(p => p.books.forEach(b => {
+    if(b.tags && Array.isArray(b.tags)) b.tags.forEach(t => set.add(t));
+  }));
+  return [...set].sort();
+}
+
 function buildFilterBar(){
   const el = document.getElementById('filterScroll');
   let html = `<button class="pill active" data-phase="ALL">All<span class="n">${TOTAL}</span></button>`;
@@ -1195,6 +1043,7 @@ function buildFilterBar(){
   el.addEventListener('click', e=>{
     const btn = e.target.closest('.pill');
     if(!btn) return;
+    triggerHaptic();
     activePhase = btn.dataset.phase;
     [...el.querySelectorAll('.pill')].forEach(b=>b.classList.toggle('active', b===btn));
     applyFilter();
@@ -1213,8 +1062,13 @@ function buildFilterBar(){
 function bookCard(book, globalIdx){
   const isRead = !!progress[book.k];
   const wc = washiColors[globalIdx % washiColors.length];
+  const tagsHtml = book.tags && book.tags.length ? `<div class="tags-preview">${book.tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>` : '';
+  
+  let hiddenByTag = false;
+  if(book.tags && book.tags.some(t => disabledTags[t])) hiddenByTag = true;
+
   return `
-  <div class="card ${isRead?'read':''}" data-key="${book.k}" data-url="${book.u}" tabindex="0" role="button" aria-pressed="${isRead}" aria-label="${book.t}, open on League of Comic Geeks">
+  <div class="card ${isRead?'read':''}" data-key="${book.k}" data-hidden-tag="${hiddenByTag}" style="${hiddenByTag?'display:none;':''}" tabindex="0" role="button" aria-pressed="${isRead}" aria-label="${book.t}">
     <div class="washi" style="background:${wc}"></div>
     <div class="cover-wrap">
       <img loading="lazy" src="${coverUrl(book.c)}" alt="${book.t} cover"
@@ -1224,15 +1078,19 @@ function bookCard(book, globalIdx){
     </div>
     <div class="info">
       <div class="b-title">${book.t}</div>
+      ${tagsHtml}
       <div class="row-bottom">
         <span class="ext-hint">tap cover → LOCG</span>
-        <button class="chk-btn" data-key="${book.k}" aria-label="Mark ${book.t} as read">
+        <button class="chk-btn" data-key="${book.k}" aria-label="Mark ${book.t} read">
           ${checkSvg()}
         </button>
       </div>
     </div>
   </div>`;
 }
+
+const cardByKey = {};
+const bookByKey = {};
 
 function render(){
   const main = document.getElementById('main');
@@ -1257,24 +1115,22 @@ function render(){
   main.innerHTML = html;
   attachCardEvents();
   applyFilter();
+  buildTagTogglesUI();
 }
 
 function titleCase(s){
-  // Keep roman numerals / punctuation, just normalize casing nicely
   return s.replace(/\w\S*/g, t=>{
-    if(t === t.toUpperCase() && t.length<=4 && /^[A-Z0-9&.!'-]+$/.test(t)) return t; // keep acronyms/short caps like X, 1980S
+    if(t === t.toUpperCase() && t.length<=4 && /^[A-Z0-9&.!'-]+$/.test(t)) return t;
     return t.charAt(0).toUpperCase()+t.slice(1).toLowerCase();
   });
 }
-
-const cardByKey = {};
-const bookByKey = {};
 
 function attachCardEvents(){
   document.querySelectorAll('.card').forEach(card=>{
     cardByKey[card.dataset.key] = card;
     card.addEventListener('click', e=>{
       if(e.target.closest('.chk-btn')) return;
+      triggerHaptic();
       openDrawer(card.dataset.key);
     });
     card.addEventListener('keydown', e=>{
@@ -1287,6 +1143,7 @@ function attachCardEvents(){
   document.querySelectorAll('.chk-btn').forEach(btn=>{
     btn.addEventListener('click', e=>{
       e.stopPropagation();
+      triggerHaptic();
       toggleRead(btn.dataset.key);
     });
   });
@@ -1305,8 +1162,8 @@ function toggleRead(key){
 
 function applyFilter(){
   document.querySelectorAll('.phase-section').forEach(sec=>{
-    const show = activePhase === 'ALL' || sec.dataset.phase === activePhase;
-    sec.style.display = show ? '' : 'none';
+    const showPhase = activePhase === 'ALL' || sec.dataset.phase === activePhase;
+    sec.style.display = showPhase ? '' : 'none';
   });
 }
 
@@ -1319,7 +1176,6 @@ function updateProgressUI(){
   document.getElementById('tapeFlag').setAttribute('data-pct', pct + '%');
   document.getElementById('pctLabel').textContent = pct + '% through the run';
 
-  // find current phase (first phase not fully complete)
   let currentPhase = null, nextBook = null;
   for(const phase of DATA){
     const total = phase.books.length;
@@ -1343,7 +1199,7 @@ function updateProgressUI(){
 }
 
 document.getElementById('resetBtn').addEventListener('click', ()=>{
-  if(!confirm('Clear every mark on this reading order? This cannot be undone.')) return;
+  if(!confirm('Clear every mark on this reading order?')) return;
   progress = {};
   saveProgress();
   document.querySelectorAll('.card.read').forEach(c=>{
@@ -1353,10 +1209,105 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
   updateProgressUI();
 });
 
-/* ============ SIDE DRAWER ============ */
+const settingsDrawer = document.getElementById('settingsDrawer');
+const drawerOverlay = document.getElementById('drawerOverlay');
+
+document.getElementById('openSettingsBtn').addEventListener('click', ()=>{
+  triggerHaptic();
+  settingsDrawer.classList.add('open');
+  drawerOverlay.classList.add('open');
+  settingsDrawer.setAttribute('aria-hidden','false');
+});
+
+document.getElementById('settingsClose').addEventListener('click', closeAllDrawers);
+
+function buildTagTogglesUI(){
+  const wrap = document.getElementById('tagTogglesWrap');
+  const tags = getAllTags();
+  if(!tags.length){
+    wrap.innerHTML = '<div class="drawer-hint">No tags found in current order.</div>';
+    return;
+  }
+  wrap.innerHTML = tags.map(tag=>{
+    const isDisabled = !!disabledTags[tag];
+    return `<div class="tag-toggle-chip ${isDisabled?'disabled':''}" data-tag="${tag}">${tag}</div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.tag-toggle-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      triggerHaptic();
+      const t = chip.dataset.tag;
+      disabledTags[t] = !disabledTags[t];
+      saveDisabledTags();
+      buildTagTogglesUI();
+      refreshTagVisibility();
+    });
+  });
+}
+
+function refreshTagVisibility(){
+  document.querySelectorAll('.card').forEach(card=>{
+    const key = card.dataset.key;
+    const book = bookByKey[key];
+    if(!book) return;
+    let hidden = false;
+    if(book.tags && book.tags.some(t => disabledTags[t])) hidden = true;
+    card.style.display = hidden ? 'none' : '';
+  });
+}
+
+document.querySelectorAll('.palette-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    triggerHaptic();
+    document.querySelectorAll('.palette-card').forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    const theme = card.dataset.theme;
+    document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+    localStorage.setItem(THEME_KEY, theme);
+  });
+});
+
+document.getElementById('applyCustomPaletteBtn').addEventListener('click', ()=>{
+  triggerHaptic();
+  const mat = document.getElementById('custMat').value;
+  const paper = document.getElementById('custPaper').value;
+  const thread = document.getElementById('custThread').value;
+  const ruler = document.getElementById('custRuler').value;
+  
+  document.body.className = '';
+  const root = document.documentElement;
+  root.style.setProperty('--mat', mat);
+  root.style.setProperty('--paper', paper);
+  root.style.setProperty('--thread', thread);
+  root.style.setProperty('--ruler', ruler);
+  localStorage.setItem(THEME_KEY, 'custom');
+  localStorage.setItem('axm-custom-colors', JSON.stringify({mat, paper, thread, ruler}));
+});
+
+const savedTheme = localStorage.getItem(THEME_KEY);
+if(savedTheme && savedTheme !== 'default'){
+  if(savedTheme === 'custom'){
+    try{
+      const cols = JSON.parse(localStorage.getItem('axm-custom-colors'));
+      if(cols){
+        document.documentElement.style.setProperty('--mat', cols.mat);
+        document.documentElement.style.setProperty('--paper', cols.paper);
+        document.documentElement.style.setProperty('--thread', cols.thread);
+        document.documentElement.style.setProperty('--ruler', cols.ruler);
+      }
+    }catch(e){}
+  } else {
+    document.body.className = `theme-${savedTheme}`;
+    const card = document.querySelector(`.palette-card[data-theme="${savedTheme}"]`);
+    if(card){
+      document.querySelectorAll('.palette-card').forEach(c=>c.classList.remove('active'));
+      card.classList.add('active');
+    }
+  }
+}
+
 let currentDrawerKey = null;
 const drawerEl = document.getElementById('drawer');
-const drawerOverlay = document.getElementById('drawerOverlay');
 
 function openDrawer(key){
   const book = bookByKey[key];
@@ -1365,6 +1316,7 @@ function openDrawer(key){
   document.getElementById('drawerCover').src = coverUrl(book.c);
   document.getElementById('drawerCover').alt = book.t + ' cover';
   document.getElementById('drawerTitle').textContent = book.t;
+  document.getElementById('drawerTagsWrap').innerHTML = book.tags && book.tags.length ? `<div class="tags-preview">${book.tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>` : '';
   const locgBtn = document.getElementById('drawerLocgBtn');
   locgBtn.onclick = ()=> window.open(book.u, '_blank', 'noopener');
   document.getElementById('issuePasteArea').value = '';
@@ -1374,25 +1326,26 @@ function openDrawer(key){
   drawerEl.setAttribute('aria-hidden','false');
 }
 
-function closeDrawer(){
+function closeAllDrawers(){
   drawerEl.classList.remove('open');
+  settingsDrawer.classList.remove('open');
   drawerOverlay.classList.remove('open');
   drawerEl.setAttribute('aria-hidden','true');
+  settingsDrawer.setAttribute('aria-hidden','true');
   currentDrawerKey = null;
 }
 
-document.getElementById('drawerClose').addEventListener('click', closeDrawer);
-drawerOverlay.addEventListener('click', closeDrawer);
-document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeDrawer(); });
+document.getElementById('drawerClose').addEventListener('click', closeAllDrawers);
+drawerOverlay.addEventListener('click', closeAllDrawers);
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeAllDrawers(); });
 
-/* ============ ISSUE CHECKLISTS ============ */
 function renderIssueList(key){
   const list = document.getElementById('issueList');
   const progWrap = document.getElementById('issueProgressWrap');
   const data = checklists[key];
   if(!data || !data.issues || !data.issues.length){
     list.innerHTML = '';
-    progWrap.innerHTML = `<div class="drawer-hint">No checklist yet for this collection. Paste its issue list below to build one.</div>`;
+    progWrap.innerHTML = `<div class="drawer-hint">No checklist yet for this collection. Paste issue list below.</div>`;
     return;
   }
   const done = data.issues.filter(is=>data.checked && data.checked[is.num]).length;
@@ -1401,12 +1354,13 @@ function renderIssueList(key){
     const checked = !!(data.checked && data.checked[is.num]);
     return `
     <li class="issue-row ${checked?'checked':''}" data-num="${is.num}">
-      <input type="checkbox" ${checked?'checked':''} aria-label="Mark issue #${is.num} read">
+      <input type="checkbox" ${checked?'checked':''} aria-label="Issue #${is.num}">
       <span class="issue-txt"><span class="issue-num">#${is.num}</span>${is.title}</span>
     </li>`;
   }).join('');
   list.querySelectorAll('.issue-row').forEach(row=>{
-    row.addEventListener('click', e=>{
+    row.addEventListener('click', ()=>{
+      triggerHaptic();
       const num = row.dataset.num;
       const d = checklists[key];
       if(!d.checked) d.checked = {};
@@ -1423,18 +1377,16 @@ function parseIssueText(text){
   const seen = new Set();
   for(let i=0;i<lines.length;i++){
     const line = lines[i];
-    // metadata lines look like: The Amazing Spider-Man #30   ·   Apr 2001   ·   Story   ·   22 pages
     if(line.includes('·') && /#\d+/.test(line)){
       const numMatch = line.match(/#(\d+)/);
       if(!numMatch) continue;
       const num = numMatch[1];
       if(seen.has(num)) continue;
-      // title is the nearest preceding line that isn't itself a metadata/duplicate line
       let title = '';
       for(let j=i-1;j>=0;j--){
         const cand = lines[j];
         if(cand.includes('·')) break;
-        if(/^\d+$/.test(cand)) continue; // index number line
+        if(/^\d+$/.test(cand)) continue;
         if(/^#?\d+$/.test(cand)) continue;
         title = cand;
         break;
@@ -1444,7 +1396,6 @@ function parseIssueText(text){
       issues.push({num, title});
     }
   }
-  // sort by numeric issue number for a clean checklist order
   issues.sort((a,b)=> parseInt(a.num,10) - parseInt(b.num,10));
   return issues;
 }
@@ -1454,7 +1405,7 @@ document.getElementById('parseIssuesBtn').addEventListener('click', ()=>{
   const text = document.getElementById('issuePasteArea').value;
   const issues = parseIssueText(text);
   if(!issues.length){
-    alert("Couldn't find any issues in that text. Make sure you pasted the collection's story list from the League of Comic Geeks overview tab (it should include lines like \"The Amazing Spider-Man #30 · Apr 2001 · Story · 22 pages\").");
+    alert("Couldn't find any issues in that text. Ensure you pasted LoCG story list text.");
     return;
   }
   const existing = checklists[currentDrawerKey] || {};
@@ -1465,15 +1416,13 @@ document.getElementById('parseIssuesBtn').addEventListener('click', ()=>{
 
 document.getElementById('clearIssuesBtn').addEventListener('click', ()=>{
   if(!currentDrawerKey) return;
-  if(!confirm('Clear the issue checklist for this collection?')) return;
+  if(!confirm('Clear issue checklist?')) return;
   delete checklists[currentDrawerKey];
   saveChecklists();
   renderIssueList(currentDrawerKey);
 });
 
-/* ============ CSV IMPORT ============ */
 function parseCSV(text){
-  // basic RFC4180-ish CSV parser (handles quoted fields with commas/newlines)
   const rows = [];
   let row = [], field = '', inQuotes = false;
   for(let i=0;i<text.length;i++){
@@ -1499,21 +1448,24 @@ function slugify(s){
 }
 
 function buildDataFromCSV(rows){
-  // detect & skip header row if present
   let startIdx = 0;
   const firstCell = (rows[0][0] || '').trim().toLowerCase();
-  if(firstCell === 'phase number' || firstCell === 'phase' ){ startIdx = 1; }
+  if(firstCell.includes('phase')) startIdx = 1;
 
   const phaseOrder = [];
   const phaseMap = {};
   for(let i=startIdx;i<rows.length;i++){
     const r = rows[i];
-    if(r.length < 4) continue;
+    if(r.length < 5) continue;
     const num = (r[0]||'').trim();
     const name = (r[1]||'').trim();
     const title = (r[2]||'').trim();
-    const url = (r[3]||'').trim();
+    const url = (r[3]||'').trim();     /* Column 3: Comic Link on LoCG */
+    const rawTags = (r[4]||'').trim(); /* Column 4: Tags */
     if(!num || !title || !url) continue;
+
+    const tags = rawTags ? rawTags.split(',').map(t=>t.trim()).filter(Boolean) : [];
+
     if(!phaseMap[num]){
       phaseMap[num] = { num, name, books: [] };
       phaseOrder.push(num);
@@ -1521,7 +1473,7 @@ function buildDataFromCSV(rows){
     const idMatch = url.match(/\/comic\/(\d+)/);
     const c = idMatch ? idMatch[1] : '';
     const k = c ? `c${c}` : `${slugify(num)}-${slugify(title)}`;
-    phaseMap[num].books.push({ t: title, u: url, c, k });
+    phaseMap[num].books.push({ t: title, u: url, c, k, tags });
   }
   return phaseOrder.map(n=>phaseMap[n]);
 }
@@ -1535,9 +1487,7 @@ function reinitAfterDataChange(){
   updateProgressUI();
 }
 
-document.getElementById('importBtn').addEventListener('click', ()=>{
-  document.getElementById('csvFileInput').click();
-});
+document.getElementById('importBtn').addEventListener('click', ()=>document.getElementById('csvFileInput').click());
 
 document.getElementById('csvFileInput').addEventListener('change', (e)=>{
   const file = e.target.files[0];
@@ -1548,17 +1498,17 @@ document.getElementById('csvFileInput').addEventListener('change', (e)=>{
       const rows = parseCSV(String(reader.result));
       const newData = buildDataFromCSV(rows);
       if(!newData.length){
-        document.getElementById('csvStatus').textContent = 'No valid rows found in that CSV. Expected columns: Phase Number, Phase Name, Comic Name, Comic Link on LoCG.';
+        document.getElementById('csvStatus').textContent = 'Error: Expected 5 columns (Phase Number, Phase Name, Comic Name, LoCG Link, Tags).';
         return;
       }
       DATA = newData;
       try{ localStorage.setItem(CUSTOM_DATA_KEY, JSON.stringify(DATA)); }catch(err){}
       document.getElementById('defaultOrderBtn').style.display = '';
       const bookCount = DATA.reduce((n,p)=>n+p.books.length,0);
-      document.getElementById('csvStatus').textContent = `Imported ${DATA.length} phases, ${bookCount} collected editions.`;
+      document.getElementById('csvStatus').textContent = `Imported ${DATA.length} phases, ${bookCount} books successfully.`;
       reinitAfterDataChange();
     }catch(err){
-      document.getElementById('csvStatus').textContent = 'Could not parse that CSV: ' + err.message;
+      document.getElementById('csvStatus').textContent = 'Parse failed: ' + err.message;
     }
   };
   reader.readAsText(file);
@@ -1566,7 +1516,7 @@ document.getElementById('csvFileInput').addEventListener('change', (e)=>{
 });
 
 document.getElementById('defaultOrderBtn').addEventListener('click', ()=>{
-  if(!confirm('Discard your imported reading order and go back to the default order?')) return;
+  if(!confirm('Revert to default reading order?')) return;
   DATA = DEFAULT_DATA;
   try{ localStorage.removeItem(CUSTOM_DATA_KEY); }catch(err){}
   document.getElementById('defaultOrderBtn').style.display = 'none';
